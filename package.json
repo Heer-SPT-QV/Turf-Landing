@@ -31,6 +31,7 @@
     ]
   },
   "dependencies": {
+    "react-hook-form": "^7.43.9",
     "react-waypoint": "^10.1.0"
   }
 }
