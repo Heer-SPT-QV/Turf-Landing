@@ -16,7 +16,7 @@ import ScrollSpyMenu from 'common/components/ScrollSpyMenu';
 import LogoImage from 'common/assets/image/saasModern/logo-white.png';
 import LogoImageAlt from 'common/assets/image/saasModern/logo.png';
 
-const Navbar = ({ navbarStyle, logoStyle, button, row, menuWrapper }) => {
+const Navbar = ({ navbarStyle, logoStyle, button, row, menuWrapper,handleLoginModal }) => {
   const { state, dispatch } = useContext(DrawerContext);
 
   // Toggle drawer
@@ -50,11 +50,11 @@ const Navbar = ({ navbarStyle, logoStyle, button, row, menuWrapper }) => {
               menuItems={MENU_ITEMS}
               offset={-70}
             />
-            <Link href="/login">
-              <a className="navbar_button">
-                <Button {...button} title="SIGN UP" />
-              </a>
-            </Link>
+            {/* <Link href="/login">
+              <a className="navbar_button"> */}
+                <Button {...button} title="SIGN UP" onClick={handleLoginModal} />
+              {/* </a>
+            </Link> */}
             <Drawer
               width="420px"
               placement="right"

@@ -1,63 +1,69 @@
-import React, { Fragment } from 'react';
-import Head from 'next/head';
-import { ThemeProvider } from 'styled-components';
-import Sticky from 'react-stickynode';
-import { DrawerProvider } from 'common/contexts/DrawerContext';
-import { saasModernTheme } from 'common/theme/saasModern';
 import ResetCSS from 'common/assets/css/style';
-import { GlobalStyle, ContentWrapper } from 'containers/SaasModern/sassModern.style';
+import { DrawerProvider } from 'common/contexts/DrawerContext';
+import { theme } from 'common/theme/webApp';
+import Banner from 'containers/WebApp/Banner';
+import Blog from 'containers/WebApp/Blog';
+import CallToAction from 'containers/WebApp/CallToAction';
+import Clients from 'containers/WebApp/Clients';
+import Counter from 'containers/WebApp/Counter';
+import CustomerSupport from 'containers/WebApp/CustomerSupport';
+import Features from 'containers/WebApp/Features';
+import Footer from 'containers/WebApp/Footer';
+import Navbar from 'containers/WebApp/Navbar';
+import Pricing from 'containers/WebApp/Pricing';
+import SecureDashboard from 'containers/WebApp/SecureDashboard';
+import Services from 'containers/WebApp/Services';
+import Testimonials from 'containers/WebApp/Testimonials';
+import Video from 'containers/WebApp/Video';
+import GlobalStyle, { AppWrapper, ContentWrapper } from 'containers/WebApp/webApp.style';
+import Head from 'next/head';
+import React from 'react';
+import Sticky from 'react-stickynode';
+import { ThemeProvider } from 'styled-components';
 
-import BannerSection from 'containers/SaasModern/Banner';
-import Navbar from 'containers/SaasModern/Navbar';
-import WorkingProcessSection from 'containers/SaasModern/WorkingProcess';
-import PricingSection from 'containers/SaasModern/Pricing';
-import PartnerSection from 'containers/SaasModern/Partner';
-import FaqSection from 'containers/SaasModern/Faq';
-import TrialSection from 'containers/SaasModern/Trial';
-import InfoSection from 'containers/SaasModern/Info';
-import FeatureSection from 'containers/SaasModern/Feature';
-import UpdateScreen from 'containers/SaasModern/UpdateScreen';
-import TestimonialSection from 'containers/SaasModern/Testimonial';
-import Footer from 'containers/SaasModern/Footer';
-
-const SaasModern = () => {
+const WebApp = () => {
   return (
-    <ThemeProvider theme={saasModernTheme}>
-      <Fragment>
+    <ThemeProvider theme={theme}>
+      <>
         <Head>
-          <title>SaaS | A react next landing page</title>
+          <title>Web App | A next js landing page</title>
           <meta name="Description" content="React next landing page" />
-          <meta name="theme-color" content="#ec5555" />
-          {/* Load google fonts */}
-          <link
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,500i,700,900|Open+Sans:400,400i,600,700"
-            rel="stylesheet"
-          />
+          <meta name="theme-color" content="#2563FF" />
+          <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700" rel="stylesheet" />
+          <meta name="keywords" content="React, React js, Next, Next js, Super fast next js landing, Modren landing, Next js landing" />
         </Head>
+        {/* end of head */}
 
         <ResetCSS />
         <GlobalStyle />
+        {/* end of global and reset style */}
 
-        <ContentWrapper>
+        {/* start app classic landing */}
+        <AppWrapper>
           <Sticky top={0} innerZ={9999} activeClass="sticky-nav-active">
             <DrawerProvider>
               <Navbar />
             </DrawerProvider>
           </Sticky>
-          <BannerSection />
-          <WorkingProcessSection />
-          <InfoSection />
-          <FeatureSection />
-          <UpdateScreen />
-          <PricingSection />
-          <PartnerSection />
-          <TestimonialSection />
-          <FaqSection />
-          <TrialSection />
-          <Footer />
-        </ContentWrapper>
-      </Fragment>
+          <ContentWrapper>
+            <Banner />
+            <Features />
+            <Video />
+            <Services />
+            <Clients />
+            <SecureDashboard />
+            <Counter />
+            <Testimonials />
+            <Pricing />
+            <CustomerSupport />
+            <Blog />
+            <CallToAction />
+            <Footer />
+          </ContentWrapper>
+        </AppWrapper>
+      </>
     </ThemeProvider>
   );
 };
-export default SaasModern;
+
+export default WebApp;

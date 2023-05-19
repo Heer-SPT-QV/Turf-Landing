@@ -1,27 +1,70 @@
-import LogoImageStick from 'common/assets/image/webApp/header-logo-stick.svg';
-import LogoImage from 'common/assets/image/webApp/header-logo.svg';
-import Box from 'common/components/Box';
-import Button from 'common/components/Button';
-import Drawer from 'common/components/Drawer';
-import HamburgMenu from 'common/components/HamburgMenu';
-import NavbarWrapper from 'common/components/Navbar';
-import ScrollSpyMenu from 'common/components/ScrollSpyMenu';
-import Container from 'common/components/UI/Container';
-import Logo from 'common/components/UIElements/Logo';
-import { DrawerContext } from 'common/contexts/DrawerContext';
-import { MENU_ITEMS } from 'common/data/WebApp';
-import Link from 'next/link';
-import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import { useMediaQuery } from "@material-ui/core";
+import { closeModal, openModal } from "@redq/reuse-modal";
+import LogoImageStick from "common/assets/image/webApp/header-logo-stick.svg";
+import LogoImage from "common/assets/image/webApp/header-logo.svg";
+import Box from "common/components/Box";
+import Button from "common/components/Button";
+import Drawer from "common/components/Drawer";
+import HamburgMenu from "common/components/HamburgMenu";
+import NavbarWrapper from "common/components/Navbar";
+import ScrollSpyMenu from "common/components/ScrollSpyMenu";
+import Container from "common/components/UI/Container";
+import Logo from "common/components/UIElements/Logo";
+import { DrawerContext } from "common/contexts/DrawerContext";
+import { MENU_ITEMS } from "common/data/WebApp";
+import LoginModal from "containers/App/LoginModal";
+// import LoginModal from 'containers/App/LoginModal';
+import Link from "next/link";
+import PropTypes from "prop-types";
+import React, { useContext } from "react";
 
+const CloseModalButton = () => (
+  <Button
+    className="modalCloseBtn"
+    variant="fab"
+    onClick={() => closeModal()}
+    icon={<i className="flaticon-plus-symbol" />}
+  />
+);
+const CloseModalButtonAlt = () => (
+  <Button
+    className="modalCloseBtn alt"
+    variant="fab"
+    onClick={() => closeModal()}
+    icon={<i className="flaticon-plus-symbol" />}
+  />
+);
 
 const Navbar = ({ navbarStyle, logoStyle, button, row, menuWrapper }) => {
   const { state, dispatch } = useContext(DrawerContext);
+  const matches = useMediaQuery("(min-width:800px)");
+
+  const handleLoginModal = () => {
+    openModal({
+      config: {
+        className: "login-modal",
+        disableDragging: true,
+        width: "100%",
+        height: "100%",
+        animationFrom: { transform: "translateY(100px)" }, // react-spring <Spring from={}> props value
+        animationTo: { transform: "translateY(0)" }, //  react-spring <Spring to={}> props value
+        transition: {
+          mass: 1,
+          tension: 180,
+          friction: 26,
+        },
+      },
+      component: LoginModal,
+      componentProps: {},
+      closeComponent: CloseModalButton,
+      closeOnClickOutside: false,
+    });
+  };
 
   // Toggle drawer
   const toggleHandler = () => {
     dispatch({
-      type: 'TOGGLE',
+      type: "TOGGLE",
     });
   };
 
@@ -49,9 +92,13 @@ const Navbar = ({ navbarStyle, logoStyle, button, row, menuWrapper }) => {
               menuItems={MENU_ITEMS}
               offset={-70}
             />
-            <Link href="#">
+            <Link href="">
               <a className="navbar_button">
-                <Button {...button} title="Login Now" />
+                <Button
+                  {...button}
+                  title="Login Now"
+                  onClick={handleLoginModal}
+                />
               </a>
             </Link>
             <Link href="#">
@@ -59,6 +106,12 @@ const Navbar = ({ navbarStyle, logoStyle, button, row, menuWrapper }) => {
                 <Button {...button} title="Join Free" />
               </a>
             </Link>
+            {!matches &&<Button
+              variant="textButton"
+              onClick={handleLoginModal}
+              icon={<i className="flaticon-user" />}
+              aria-label="login"
+            />}
             <Drawer
               width="420px"
               placement="right"
@@ -90,33 +143,33 @@ Navbar.propTypes = {
 
 Navbar.defaultProps = {
   navbarStyle: {
-    className: 'sassminimal_navbar',
-    minHeight: '70px',
-    display: 'block',
+    className: "sassminimal_navbar",
+    minHeight: "70px",
+    display: "block",
   },
   row: {
     flexBox: true,
-    alignItems: 'center',
-    width: '100%',
+    alignItems: "center",
+    width: "100%",
   },
   logoStyle: {
-    maxWidth: ['126px', '126px'],
+    maxWidth: ["126px", "126px"],
   },
   button: {
-    type: 'button',
-    fontSize: '13px',
-    fontWeight: '600',
-    color: 'white',
-    borderRadius: '4px',
-    pl: '15px',
-    pr: '15px',
-    colors: 'primaryWithBg',
-    minHeight: 'auto',
+    type: "button",
+    fontSize: "13px",
+    fontWeight: "600",
+    color: "white",
+    borderRadius: "4px",
+    pl: "15px",
+    pr: "15px",
+    colors: "primaryWithBg",
+    minHeight: "auto",
     height: `${1}`,
   },
   menuWrapper: {
     flexBox: true,
-    alignItems: 'center',
+    alignItems: "center",
   },
 };
 
