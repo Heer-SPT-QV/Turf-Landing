@@ -18,14 +18,7 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 import React, { useContext } from "react";
 
-const CloseModalButton = () => (
-  <Button
-    className="modalCloseBtn"
-    variant="fab"
-    onClick={() => closeModal()}
-    icon={<i className="flaticon-plus-symbol" />}
-  />
-);
+
 const CloseModalButtonAlt = () => (
   <Button
     className="modalCloseBtn alt"
@@ -35,9 +28,28 @@ const CloseModalButtonAlt = () => (
   />
 );
 
-const Navbar = ({ navbarStyle, logoStyle, button, row, menuWrapper }) => {
+const Navbar = ({
+  navbarStyle,
+  logoStyle,
+  button,
+  row,
+  menuWrapper,
+  open,
+  setOpen,
+}) => {
   const { state, dispatch } = useContext(DrawerContext);
   const matches = useMediaQuery("(min-width:800px)");
+  const CloseModalButton = () => (
+    <Button
+      className="modalCloseBtn"
+      variant="fab"
+      onClick={() => {
+        setOpen(false);
+        closeModal();
+      }}
+      icon={<i className="flaticon-plus-symbol" />}
+    />
+  );
 
   const handleLoginModal = () => {
     openModal({
@@ -97,7 +109,10 @@ const Navbar = ({ navbarStyle, logoStyle, button, row, menuWrapper }) => {
                 <Button
                   {...button}
                   title="Login Now"
-                  onClick={handleLoginModal}
+                  onClick={() => {
+                    setOpen(true);
+                    handleLoginModal();
+                  }}
                 />
               </a>
             </Link>
@@ -106,12 +121,14 @@ const Navbar = ({ navbarStyle, logoStyle, button, row, menuWrapper }) => {
                 <Button {...button} title="Join Free" />
               </a>
             </Link>
-            {!matches &&<Button
-              variant="textButton"
-              onClick={handleLoginModal}
-              icon={<i className="flaticon-user" />}
-              aria-label="login"
-            />}
+            {!matches && (
+              <Button
+                variant="textButton"
+                onClick={handleLoginModal}
+                icon={<i className="flaticon-user" />}
+                aria-label="login"
+              />
+            )}
             <Drawer
               width="420px"
               placement="right"

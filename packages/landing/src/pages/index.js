@@ -1,27 +1,40 @@
-import ResetCSS from 'common/assets/css/style';
-import { DrawerProvider } from 'common/contexts/DrawerContext';
-import { theme } from 'common/theme/webApp';
-import Banner from 'containers/WebApp/Banner';
-import Blog from 'containers/WebApp/Blog';
-import CallToAction from 'containers/WebApp/CallToAction';
-import Clients from 'containers/WebApp/Clients';
-import Counter from 'containers/WebApp/Counter';
-import CustomerSupport from 'containers/WebApp/CustomerSupport';
-import Features from 'containers/WebApp/Features';
-import Footer from 'containers/WebApp/Footer';
-import Navbar from 'containers/WebApp/Navbar';
-import Pricing from 'containers/WebApp/Pricing';
-import SecureDashboard from 'containers/WebApp/SecureDashboard';
-import Services from 'containers/WebApp/Services';
-import Testimonials from 'containers/WebApp/Testimonials';
-import Video from 'containers/WebApp/Video';
-import GlobalStyle, { AppWrapper, ContentWrapper } from 'containers/WebApp/webApp.style';
-import Head from 'next/head';
-import React from 'react';
-import Sticky from 'react-stickynode';
-import { ThemeProvider } from 'styled-components';
+import ResetCSS from "common/assets/css/style";
+import { DrawerProvider } from "common/contexts/DrawerContext";
+import { theme } from "common/theme/webApp";
+import Banner from "containers/WebApp/Banner";
+import Blog from "containers/WebApp/Blog";
+import CallToAction from "containers/WebApp/CallToAction";
+import Clients from "containers/WebApp/Clients";
+import Counter from "containers/WebApp/Counter";
+import CustomerSupport from "containers/WebApp/CustomerSupport";
+import Features from "containers/WebApp/Features";
+import Footer from "containers/WebApp/Footer";
+import Navbar from "containers/WebApp/Navbar";
+import Pricing from "containers/WebApp/Pricing";
+import SecureDashboard from "containers/WebApp/SecureDashboard";
+import Services from "containers/WebApp/Services";
+import Testimonials from "containers/WebApp/Testimonials";
+import Video from "containers/WebApp/Video";
+import GlobalStyle, {
+  AppWrapper,
+  ContentWrapper,
+} from "containers/WebApp/webApp.style";
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
+import Sticky from "react-stickynode";
+import { ThemeProvider } from "styled-components";
 
 const WebApp = () => {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [open]);
+
   return (
     <ThemeProvider theme={theme}>
       <>
@@ -29,8 +42,14 @@ const WebApp = () => {
           <title>Web App | A next js landing page</title>
           <meta name="Description" content="React next landing page" />
           <meta name="theme-color" content="#2563FF" />
-          <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700" rel="stylesheet" />
-          <meta name="keywords" content="React, React js, Next, Next js, Super fast next js landing, Modren landing, Next js landing" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700"
+            rel="stylesheet"
+          />
+          <meta
+            name="keywords"
+            content="React, React js, Next, Next js, Super fast next js landing, Modren landing, Next js landing"
+          />
         </Head>
         {/* end of head */}
 
@@ -42,7 +61,7 @@ const WebApp = () => {
         <AppWrapper>
           <Sticky top={0} innerZ={9999} activeClass="sticky-nav-active">
             <DrawerProvider>
-              <Navbar />
+              <Navbar open={open} setOpen={setOpen} />
             </DrawerProvider>
           </Sticky>
           <ContentWrapper>

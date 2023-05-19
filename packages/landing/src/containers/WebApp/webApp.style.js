@@ -385,12 +385,12 @@ const GlobalStyle = createGlobalStyle`
     z-index: 999991 !important;
     background-color: transparent !important;
     color: ${themeGet('colors.white', '#ffffff')} !important;
-    top: 10px !important;
-    right: 90px !important;
+    top: 40px !important;
+    right: 120px !important;
 
     @media(max-width: 460px){
-      top: 0 !important;
-      right: 0 !important;
+      top: 20 !important;
+      right: 10px !important;
     }
 
     span.btn-icon {
@@ -417,6 +417,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .reuseModalHolder {
+    width: 100%;
     border: 0 !important;
     background-color: transparent !important;
 
@@ -470,7 +471,7 @@ const GlobalStyle = createGlobalStyle`
     @media (min-width: 768px) {
       top: 0!important;
       left: 0!important;
-      max-width: 90%!important;
+      max-width: 100%!important;
       max-height: 100%!important;
     }
   }
@@ -485,7 +486,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .reuseModalHolder.login-modal .innerRndComponent{
-    overflow-y: auto;
+    overflow-y: scroll;
   }
 
 `;
