@@ -211,6 +211,12 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .reuseModalHolder {
+    border: 0 !important;
+    background-color: transparent !important;}
+
+}
+
 
   .sticky-nav-active {
     .sassminimal_navbar {
