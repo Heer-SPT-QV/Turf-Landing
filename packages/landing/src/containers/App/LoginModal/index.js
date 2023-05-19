@@ -7,14 +7,14 @@ import Box from 'common/components/Box';
 import Text from 'common/components/Text';
 import Heading from 'common/components/Heading';
 import Input from 'common/components/Input';
-import CheckBox from 'common/components/Checkbox/index';
+// import CheckBox from 'common/components/Checkbox/index';
 import Button from 'common/components/Button';
 import Image from 'common/components/Image';
 import LoginModalWrapper from './loginModal.style';
 import 'rc-tabs/assets/index.css';
 import LogoImage from 'common/assets/image/agency/logo.png';
 import LoginImage from 'common/assets/image/agency/login-bg.jpg';
-import GoogleLogo from 'common/assets/image/agency/google-icon.jpg';
+// import GoogleLogo from 'common/assets/image/agency/google-icon.jpg';
 
 const LoginModal = ({
 	row,
@@ -30,11 +30,11 @@ const LoginModal = ({
 	const LoginButtonGroup = () => (
 		<Fragment>
 			<Button className="default" title="LOGIN" {...btnStyle} />
-			<Button
+			{/* <Button
 				title="Forget Password"
 				variant="textButton"
 				{...outlineBtnStyle}
-			/>
+			/> */}
 		</Fragment>
 	);
 	const SignupButtonGroup = () => (
@@ -64,24 +64,24 @@ const LoginModal = ({
 							<TabPane tab="LOGIN" key="loginForm">
 								<Heading content="Welcome Folk" {...titleStyle} />
 								<Text
-									content="Welcome to Mate Family. Please login with your personal account information letter."
+									content="Welcome to Turf Family. Please login with your personal account information letter."
 									{...descriptionStyle}
 								/>
-								<Button
+								{/* <Button
 									icon={<Image src={GoogleLogo?.src} alt="Google Icon" />}
 									title="Sign in with Google"
 									iconPosition="left"
 									className="google-login__btn"
 									{...googleButtonStyle}
-								/>
+								/> */}
 
-								<Input inputType="email" isMaterial label="Email Address" />
-								<Input inputType="password" isMaterial label="Password" />
-								<CheckBox
+								<Input inputType="number" isMaterial label="Phone number" />
+								<Input inputType="tel" isMaterial label="OTP" />
+								{/* <CheckBox
 									id="remember"
 									htmlFor="remember"
 									labelText="Remember Me"
-								/>
+								/> */}
 								<div>
 									<LoginButtonGroup />
 								</div>
@@ -89,19 +89,21 @@ const LoginModal = ({
 							<TabPane tab="REGISTER" key="registerForm">
 								<Heading content="Welcome Folk" {...titleStyle} />
 								<Text
-									content="Welcome to Mate Family. Please login with your personal account information letter."
+									content="Welcome to Turf Family. Please login with your personal account information letter."
 									{...descriptionStyle}
 								/>
-								<Button
+								{/* <Button
 									icon={<Image src={GoogleLogo?.src} alt="Google Icon" />}
 									title="Sign up with Google"
 									iconPosition="left"
 									className="google-login__btn"
 									{...googleButtonStyle}
-								/>
-								<Input isMaterial label="Full Name" />
+								/> */}
+								<Input isMaterial label="First name" />
+								<Input isMaterial label="Last name" />
+								<Input isMaterial label="Business name" />
 								<Input inputType="email" isMaterial label="Email Address" />
-								<Input inputType="password" isMaterial label="Password" />
+								<Input inputType="number" isMaterial label="Phone number" />
 								<div>
 									<SignupButtonGroup />
 								</div>

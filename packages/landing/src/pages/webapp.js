@@ -9,7 +9,7 @@ import Counter from 'containers/WebApp/Counter';
 import CustomerSupport from 'containers/WebApp/CustomerSupport';
 import Features from 'containers/WebApp/Features';
 import Footer from 'containers/WebApp/Footer';
-import Navbar from 'containers/WebApp/Navbar';
+// import Navbar from 'containers/WebApp/Navbar';
 import Pricing from 'containers/WebApp/Pricing';
 import SecureDashboard from 'containers/WebApp/SecureDashboard';
 import Services from 'containers/WebApp/Services';
@@ -20,6 +20,7 @@ import Head from 'next/head';
 import React from 'react';
 import Sticky from 'react-stickynode';
 import { ThemeProvider } from 'styled-components';
+import Navbar from 'containers/App/Navbar';
 
 const WebApp = () => {
   return (
