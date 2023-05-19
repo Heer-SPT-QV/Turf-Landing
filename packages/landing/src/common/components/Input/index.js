@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import InputField, { EyeButton } from './input.style';
 const Input = ({
@@ -16,6 +16,16 @@ const Input = ({
   className,
   ...props
 }) => {
+
+
+  useEffect(()=>{
+    if (value){
+      setState({
+        ...state,
+        value: value
+      })
+    }
+  },[value])
   // use toggle hooks
   const [state, setState] = useState({
     toggle: false,
@@ -148,7 +158,7 @@ const Input = ({
             id={htmlFor}
             name={htmlFor}
             type={inputType}
-            value={state.value}
+            value={ state.value}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleOnFocus}

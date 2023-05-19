@@ -41,6 +41,16 @@ const LoginModalWrapper = styled.div`
       }
     }
   }
+  .reusecore__button {
+    background-color: transparent;
+    &.default2 {
+      background-color: ${themeGet('colors.primary', 'red')};
+      transition: all 0.3s ease;
+      &:hover {
+        box-shadow: 0px 9px 20px -5px rgba(16, 172, 132, 0.57);
+      }
+    }
+  }
 
   .rc-tabs {
     border: 0;
