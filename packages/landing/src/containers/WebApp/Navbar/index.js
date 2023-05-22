@@ -67,7 +67,7 @@ const Navbar = ({
         },
       },
       component: LoginModal,
-      componentProps: {},
+      componentProps: {setOpen},
       closeComponent: CloseModalButton,
       closeOnClickOutside: false,
     });

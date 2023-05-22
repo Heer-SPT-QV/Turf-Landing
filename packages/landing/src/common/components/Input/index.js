@@ -19,6 +19,7 @@ const Input = ({
 
 
   useEffect(()=>{
+
     if (value){
       setState({
         ...state,
@@ -158,7 +159,7 @@ const Input = ({
             id={htmlFor}
             name={htmlFor}
             type={inputType}
-            value={ state.value}
+            value={state.value}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
             onFocus={handleOnFocus}
@@ -189,7 +190,7 @@ Input.propTypes = {
   label: PropTypes.string,
 
   /** The input value, required for a controlled component. */
-  value: PropTypes.oneOf(['string', 'number']),
+  value: PropTypes.string,
 
   /** Make default input into material style input. */
   isMaterial: PropTypes.bool,

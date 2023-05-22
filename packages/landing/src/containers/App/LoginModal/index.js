@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Tabs, { TabPane } from "rc-tabs";
 // import TabContent from 'rc-tabs/lib/TabContent';
@@ -14,7 +14,10 @@ import LoginModalWrapper from "./loginModal.style";
 import "rc-tabs/assets/index.css";
 import LogoImage from "common/assets/image/agency/logo.png";
 import LoginImage from "common/assets/image/agency/login-bg.jpg";
-import { ButtonBase } from "@material-ui/core";
+
+import { useRouter } from "next/router";
+import { closeModal } from "@redq/reuse-modal";
+import { Alert, CircularProgress, Snackbar, Typography } from "@mui/material";
 // import GoogleLogo from 'common/assets/image/agency/google-icon.jpg';
 
 const LoginModal = ({
@@ -27,38 +30,77 @@ const LoginModal = ({
   outlineBtnStyle,
   descriptionStyle,
   googleButtonStyle,
+  setOpen,
 }) => {
   const [content, setContent] = useState({
     fName: "",
     lName: "",
     bName: "",
     email: "",
-    mob: "",
+    mob: 0,
   });
+
+  function caller() {
+    let t = 35;
+    const timerr = setInterval(() => {
+      if (t === 0) {
+        clearInterval(timerr);
+      } else {
+        t--;
+      }
+
+      setTimer(t);
+    }, [1000]);
+  }
 
   const [defaultTab, setDefaultTab] = useState("loginForm");
   const [active, setActive] = useState(false);
-  const [number, setNumber] = useState(false);
-  const [status, setStatus] = useState('ph')
+  const [number, setNumber] = useState("");
+  const [status, setStatus] = useState("ph");
+  const [otp, setOtp] = useState("");
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [otpS, setOtpS] = useState();
+  const [timer, setTimer] = useState(35);
 
   function handleRegister() {
     setDefaultTab("loginForm");
     setActive(true);
-    console.log("====================================");
-    console.log(content);
-    console.log("====================================");
     setNumber(content.mob);
     console.log(content.mob);
   }
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOtpS(false);
+  };
+
   const LoginButtonGroup = () => (
     <Fragment>
-      <Button className={ status === 'ph' ?"default2":"default"} title={ status === 'ph' ?"REQUEST OTP":"LOGIN"} {...btnStyle} onClick={()=>{
-		if(status==='ph'){
-			setStatus('otp')
-		} else{
-			console("login")
-		}
-	  }} />
+      <Button
+        className={status === "ph" ? "default2" : "default"}
+        title={status === "ph" ? "REQUEST OTP" : "LOGIN"}
+        {...btnStyle}
+        disabled={number === "" || error !== "" || ( status!== "ph" && otp==="")}
+        onClick={() => {
+          if (status === "ph") {
+            setLoading(true);
+            setTimeout(() => {
+              setOtpS(true);
+              setStatus("otp");
+              setLoading(false);
+              caller();
+            }, [4000]);
+          } else {
+            router.push("/home");
+            setOpen(false);
+            closeModal();
+          }
+        }}
+      />
       {/* <Button
 				title="Forget Password"
 				variant="textButton"
@@ -78,7 +120,7 @@ const LoginModal = ({
           content.lName === "" &&
           content.bName === "" &&
           content.email === "" &&
-          content.mob == ""
+          content.mob == "" 
         }
       />
     </Fragment>
@@ -116,30 +158,82 @@ const LoginModal = ({
                   content="Welcome to Turf Family. Please login with your personal account information letter."
                   {...descriptionStyle}
                 />
-                {/* <Button
-									icon={<Image src={GoogleLogo?.src} alt="Google Icon" />}
-									title="Sign in with Google"
-									iconPosition="left"
-									className="google-login__btn"
-									{...googleButtonStyle}
-								/> */}
                 <br />
                 <br />
-                {/* <div style={{display: 'flex', alignItems:'center', gap:'40px'}}> */}
-                  <Input isMaterial label="Phone number" value={number} />
-				  {/* <button style={{background:'#10AC84', border: "none", width: '100px', height: '40px', borderRadius:'4px', cursor:'pointer', color: 'white'}} onClick={()=>{console.log('fff');}}>Request OTP</button> */}
-				  {/* <Button className="default2" color='primary' title="Request OTP"  {...btnStyle} /> */}
-                {/* </div> */}
 
-               { status!=='ph' && <Input isMaterial label="OTP" />}
-                {/* <CheckBox
-									id="remember"
-									htmlFor="remember"
-									labelText="Remember Me"
-								/> */}
-                <div>
-                  <LoginButtonGroup />
-                </div>
+                <Input
+                  isMaterial
+                  label="Phone number"
+                  value={number}
+                  onChange={(e) => {
+                    const x = /^[0-9]+$/.test(e);
+                    console.log(x, "hhjhjh", typeof e);
+
+                    if (e === "" || e.length === 10) {
+                      if (e === "") {
+                        setError("e");
+                      } else {
+                        setError("");
+                        setNumber(e);
+                      }
+                    } else if (x || e.length < 10 || e.length > 10) {
+                      setError("Please eneter only 10 digits");
+                    } else if (!x) {
+                      setError("Please enter Only number");
+                    } else {
+                      setNumber(e);
+                    }
+                  }}
+                />
+
+                {loading && <CircularProgress />}
+                {status !== "ph" && (
+                  <>
+                    {" "}
+                    <Input
+                      isMaterial
+                      label="OTP"
+                      onChange={(e) => {
+                        setOtp(e);
+                      }}
+                    />
+                    {timer !== 0 && (
+                      <Typography
+                        style={{ textAlign: "right", fontSize: "10px" }}
+                      >
+                        00:{timer < 10 ? 0 : ""}
+                        {timer}
+                      </Typography>
+                    )}
+                    {timer === 0 && (
+                     
+                        <Typography
+                          onClick={() => {
+                            caller();
+                            setOtpS(true);
+                          }}
+                          sx={{
+                            ":hover": {
+                              color: "red",
+                              cursor: "pointer",
+                            },
+                            fontSize: "22px",
+                          }}
+                          style={{
+                            textAlign: "right",
+                            fontSize: "10px",
+                            color: "blue",
+                            
+                          }}
+                        >
+                          Resend OTP
+                        </Typography>
+                      
+                    )}
+                  </>
+                )}
+
+                <div>{!loading && <LoginButtonGroup />}</div>
               </TabPane>
               <TabPane tab="REGISTER" key="registerForm">
                 <Heading content="Welcome Folk" {...titleStyle} />
@@ -147,21 +241,12 @@ const LoginModal = ({
                   content="Welcome to Turf Family. Please login with your personal account information letter."
                   {...descriptionStyle}
                 />
-                {/* <Button
-									icon={<Image src={GoogleLogo?.src} alt="Google Icon" />}
-									title="Sign up with Google"
-									iconPosition="left"
-									className="google-login__btn"
-									{...googleButtonStyle}
-								/> */}
                 <br />
                 <br />
                 <Input
                   isMaterial
                   label="First name"
-                  //   value={content.fName}
                   onChange={(e) => {
-                    // console.log(e);
                     setContent({ ...content, fName: e });
                   }}
                 />
@@ -205,6 +290,15 @@ const LoginModal = ({
                 </div>
               </TabPane>
             </Tabs>
+            <Snackbar open={otpS} autoHideDuration={6000} onClose={handleClose}>
+              <Alert
+                onClose={handleClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                An OTP has been sent Sucessfully!!
+              </Alert>
+            </Snackbar>
           </Box>
         </Box>
       </Box>

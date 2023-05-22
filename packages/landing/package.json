@@ -55,6 +55,7 @@
     "react-responsive": "^9.0.0",
     "react-reveal": "^1.2.2",
     "react-rnd": "^10.3.7",
+    "react-router-dom": "^6.11.2",
     "react-scroll-motion": "^0.3.0",
     "react-scroll-parallax": "^3.3.1",
     "react-scrollspy": "^3.4.3",
