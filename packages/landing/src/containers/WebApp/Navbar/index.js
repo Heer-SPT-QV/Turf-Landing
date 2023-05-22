@@ -18,7 +18,6 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 import React, { useContext } from "react";
 
-
 const CloseModalButtonAlt = () => (
   <Button
     className="modalCloseBtn alt"
@@ -36,6 +35,7 @@ const Navbar = ({
   menuWrapper,
   open,
   setOpen,
+  s,
 }) => {
   const { state, dispatch } = useContext(DrawerContext);
   const matches = useMediaQuery("(min-width:800px)");
@@ -67,7 +67,7 @@ const Navbar = ({
         },
       },
       component: LoginModal,
-      componentProps: {setOpen},
+      componentProps: { setOpen },
       closeComponent: CloseModalButton,
       closeOnClickOutside: false,
     });
@@ -84,66 +84,73 @@ const Navbar = ({
     <NavbarWrapper {...navbarStyle}>
       <Container>
         <Box {...row}>
-          <Logo
-            href="#"
-            logoSrc={LogoImage}
-            title="Agency"
-            logoStyle={logoStyle}
-            className="main-logo"
-          />
-          <Logo
-            href="#"
-            logoSrc={LogoImageStick}
-            title="Agency"
-            logoStyle={logoStyle}
-            className="sticky-logo"
-          />
-          <Box {...menuWrapper} className="mainMenuWrapper">
-            <ScrollSpyMenu
-              className="main_menu"
-              menuItems={MENU_ITEMS}
-              offset={-70}
+          {s === 0 && (
+            <Logo
+              href="#"
+              logoSrc={LogoImage}
+              title="Agency"
+              logoStyle={logoStyle}
+              className="main-logo"
             />
-            <Link href="">
-              <a className="navbar_button">
-                <Button
-                  {...button}
-                  title="Login Now"
-                  onClick={() => {
-                    setOpen(true);
-                    handleLoginModal();
-                  }}
+          )}
+          {s === 0 && (
+            <>
+              {" "}
+              <Logo
+                href="#"
+                logoSrc={LogoImageStick}
+                title="Agency"
+                logoStyle={logoStyle}
+                className="sticky-logo"
+              />
+              <Box {...menuWrapper} className="mainMenuWrapper">
+                <ScrollSpyMenu
+                  className="main_menu"
+                  menuItems={MENU_ITEMS}
+                  offset={-70}
                 />
-              </a>
-            </Link>
-            <Link href="#">
-              <a className="navbar_button_two">
-                <Button {...button} title="Join Free" />
-              </a>
-            </Link>
-            {!matches && (
-              <Button
-                variant="textButton"
-                onClick={handleLoginModal}
-                icon={<i className="flaticon-user" />}
-                aria-label="login"
-              />
-            )}
-            <Drawer
-              width="420px"
-              placement="right"
-              drawerHandler={<HamburgMenu barColor="#ff5f6d" />}
-              open={state.isOpen}
-              toggleHandler={toggleHandler}
-            >
-              <ScrollSpyMenu
-                className="mobile_menu"
-                menuItems={MENU_ITEMS}
-                drawerClose={true}
-                offset={-100}
-              />
-            </Drawer>
-          </Box>
+                <Link href="">
+                  <a className="navbar_button">
+                    <Button
+                      {...button}
+                      title="Login Now"
+                      onClick={() => {
+                        setOpen(true);
+                        handleLoginModal();
+                      }}
+                    />
+                  </a>
+                </Link>
+                <Link href="#">
+                  <a className="navbar_button_two">
+                    <Button {...button} title="Join Free" />
+                  </a>
+                </Link>
+                {!matches && (
+                  <Button
+                    variant="textButton"
+                    onClick={handleLoginModal}
+                    icon={<i className="flaticon-user" />}
+                    aria-label="login"
+                  />
+                )}
+                <Drawer
+                  width="420px"
+                  placement="right"
+                  drawerHandler={<HamburgMenu barColor="#ff5f6d" />}
+                  open={state.isOpen}
+                  toggleHandler={toggleHandler}
+                >
+                  <ScrollSpyMenu
+                    className="mobile_menu"
+                    menuItems={MENU_ITEMS}
+                    drawerClose={true}
+                    offset={-100}
+                  />
+                </Drawer>
+              </Box>
+            </>
+          )}
         </Box>
       </Container>
     </NavbarWrapper>

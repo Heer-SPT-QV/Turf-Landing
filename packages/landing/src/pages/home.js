@@ -9,7 +9,8 @@ import GlobalStyle, {
   ContentWrapper,
 } from "containers/WebApp/webApp.style";
 import Sticky from "react-stickynode";
-import Banner2 from "containers/WebApp/Banner";
+import Banner2 from "containers/WebApp/Banner/indexH";
+
 
 function Home() {
   const [open, setOpen] = useState(false);

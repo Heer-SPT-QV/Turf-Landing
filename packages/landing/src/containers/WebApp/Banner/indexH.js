@@ -29,11 +29,7 @@ const Banner2 = () => {
           </Box>
         </Col>
       </Container>
-      <Box className="bannerImage">
-        {image.map(({ src }, index) => (
-          <Image src={src} alt="" key={`banner-image-key-${index}`} />
-        ))}
-      </Box>
+    
     </BannerArea>
   );
 };

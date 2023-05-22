@@ -26,6 +26,7 @@ import { ThemeProvider } from "styled-components";
 
 const WebApp = () => {
   const [open, setOpen] = useState(false);
+  const s =0;
 
   useEffect(() => {
     if (open) {
@@ -61,7 +62,7 @@ const WebApp = () => {
         <AppWrapper>
           <Sticky top={0} innerZ={9999} activeClass="sticky-nav-active">
             <DrawerProvider>
-              <Navbar open={open} setOpen={setOpen} />
+              <Navbar open={open} setOpen={setOpen} s={s}/>
             </DrawerProvider>
           </Sticky>
           <ContentWrapper>
