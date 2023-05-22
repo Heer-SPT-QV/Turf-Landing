@@ -31,6 +31,10 @@ export const MENU_ITEMS = [
   },
 ];
 
+
+
+
+
 import banner1 from 'common/assets/image/webApp/banner-1.png';
 import blog1 from 'common/assets/image/webApp/blog-1.jpg';
 import blog2 from 'common/assets/image/webApp/blog-2.jpg';

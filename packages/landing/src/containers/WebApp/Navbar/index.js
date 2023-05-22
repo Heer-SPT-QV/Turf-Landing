@@ -1,4 +1,5 @@
 import { useMediaQuery } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { closeModal, openModal } from "@redq/reuse-modal";
 import LogoImageStick from "common/assets/image/webApp/header-logo-stick.svg";
 import LogoImage from "common/assets/image/webApp/header-logo.svg";
@@ -17,6 +18,11 @@ import LoginModal from "containers/App/LoginModal";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import React, { useContext } from "react";
+import AccountCircleRounded from '@mui/icons-material'
+import { BrowserRouter as Router, Route, Routes, Switch, Outlet } from 'react-router-dom';
+import Dashboard from "pages/Dashboard";
+
+
 
 const CloseModalButtonAlt = () => (
   <Button
@@ -26,6 +32,29 @@ const CloseModalButtonAlt = () => (
     icon={<i className="flaticon-plus-symbol" />}
   />
 );
+
+const MENU_ITEMS_2 = [
+  {
+    label: 'Home',
+    path: '#banner_section',
+    offset: '70',
+  },
+  {
+    label: 'Dashboard',
+    path: '/dashboard',
+    offset: '70',
+  },
+  {
+    label: 'History',
+    path: '#service_section',
+    offset: '70',
+  },
+  {
+    label: 'Subscription',
+    path: '#dashboard_section',
+    offset: '70',
+  },
+];
 
 const Navbar = ({
   navbarStyle,
@@ -37,6 +66,7 @@ const Navbar = ({
   setOpen,
   s,
 }) => {
+
   const { state, dispatch } = useContext(DrawerContext);
   const matches = useMediaQuery("(min-width:800px)");
   const CloseModalButton = () => (
@@ -151,6 +181,74 @@ const Navbar = ({
               </Box>
             </>
           )}
+          {s === 1 && (
+            <Logo
+              href="#"
+              logoSrc={LogoImage}
+              title="Agency"
+              logoStyle={logoStyle}
+              className="main-logo"
+            />
+          )}
+
+          {s === 1 && (
+            <>
+              {" "}
+              <Logo
+                href="#"
+                logoSrc={LogoImageStick}
+                title="Agency"
+                logoStyle={logoStyle}
+                className="sticky-logo"
+              />
+              <Box {...menuWrapper} className="mainMenuWrapper">
+                <ScrollSpyMenu
+                  className="main_menu"
+                  menuItems={MENU_ITEMS_2}
+                  offset={-70}
+                />
+                <Typography variant="h6" className="navbar_button">Hello,User</Typography>
+                {/* <Link href="">
+                  <a className="navbar_button">
+                    <Button
+                      {...button}
+                      title="Hello User"
+                    />
+                  </a>
+                </Link> */}
+                <Link href="#">
+                  <a className="navbar_button_two">
+                    <Button {...button} title="LogOut" />
+                  </a>
+                </Link>
+                {!matches && (
+                  <Button
+                    variant="textButton"
+                    onClick={handleLoginModal}
+                    icon={<i className="flaticon-user" />}
+                    aria-label="login"
+                  />
+                )}
+                <Drawer
+                  width="420px"
+                  placement="right"
+                  drawerHandler={<HamburgMenu barColor="#ff5f6d" />}
+                  open={state.isOpen}
+                  toggleHandler={toggleHandler}
+                >
+                  <ScrollSpyMenu
+                    className="mobile_menu"
+                    menuItems={MENU_ITEMS_2}
+                    drawerClose={true}
+                    offset={-100}
+                  />
+                </Drawer>
+              </Box>
+
+            </>
+          )}
+
+
         </Box>
       </Container>
     </NavbarWrapper>

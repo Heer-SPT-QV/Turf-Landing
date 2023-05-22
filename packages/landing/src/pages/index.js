@@ -62,7 +62,7 @@ const WebApp = () => {
         <AppWrapper>
           <Sticky top={0} innerZ={9999} activeClass="sticky-nav-active">
             <DrawerProvider>
-              <Navbar open={open} setOpen={setOpen} s={s}/>
+              <Navbar open={open} setOpen={setOpen} s={0}/>
             </DrawerProvider>
           </Sticky>
           <ContentWrapper>

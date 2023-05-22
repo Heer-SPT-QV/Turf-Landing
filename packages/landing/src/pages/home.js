@@ -21,7 +21,7 @@ function Home() {
       <AppWrapper>
         <Sticky top={0} innerZ={9999} activeClass="sticky-nav-active">
           <DrawerProvider>
-            <Navbar open={open} setOpen={setOpen} />
+            <Navbar open={open} setOpen={setOpen} s={1} />
           </DrawerProvider>
         </Sticky>
         <ContentWrapper>
