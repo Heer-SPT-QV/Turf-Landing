@@ -7,7 +7,8 @@ import GlobalStyle, {
   ContentWrapper,
 } from "containers/WebApp/webApp.style";
 import Banner2 from "containers/WebApp/Banner/indexH";
-
+import styles from "./subscription.module.css";
+import { Box } from "@mui/material";
 
 function Subscription() {
   return (
@@ -17,6 +18,8 @@ function Subscription() {
       <AppWrapper>
         <ContentWrapper>
           <Banner2 />
+       
+        
         </ContentWrapper>
       </AppWrapper>
     </ThemeProvider>
