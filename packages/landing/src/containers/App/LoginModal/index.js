@@ -93,7 +93,7 @@ const LoginModal = ({
               setStatus("otp");
               setLoading(false);
               caller();
-            }, [4000]);
+            }, [2000]);
           } else {
             router.push("/home");
             setOpen(false);

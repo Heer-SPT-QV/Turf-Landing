@@ -19,11 +19,11 @@ function Home() {
       <ResetCSS />
       <GlobalStyle />
       <AppWrapper>
-        <Sticky top={0} innerZ={9999} activeClass="sticky-nav-active">
+        {/* <Sticky top={0} innerZ={9999} activeClass="sticky-nav-active">
           <DrawerProvider>
             <Navbar open={open} setOpen={setOpen} s={1} />
           </DrawerProvider>
-        </Sticky>
+        </Sticky> */}
         <ContentWrapper>
           <Banner2 />
         </ContentWrapper>

@@ -20,7 +20,8 @@ import PropTypes from "prop-types";
 import React, { useContext } from "react";
 import AccountCircleRounded from '@mui/icons-material'
 import { BrowserRouter as Router, Route, Routes, Switch, Outlet } from 'react-router-dom';
-import Dashboard from "pages/Dashboard";
+import Dashboard from "pages/home";
+import ScrollSpyMenu2 from "common/components/ScrollSpyMenu/index2";
 
 
 
@@ -40,13 +41,12 @@ const MENU_ITEMS_2 = [
     offset: '70',
   },
   {
-    label: 'Dashboard',
-    path: '/dashboard',
-    offset: '70',
+    label: 'Subscription',
+    path: '/home/dashboard',
   },
   {
     label: 'History',
-    path: '#service_section',
+    path: '/login',
     offset: '70',
   },
   {
@@ -202,12 +202,12 @@ const Navbar = ({
                 className="sticky-logo"
               />
               <Box {...menuWrapper} className="mainMenuWrapper">
-                <ScrollSpyMenu
+                <ScrollSpyMenu2
                   className="main_menu"
                   menuItems={MENU_ITEMS_2}
-                  offset={-70}
+                 
                 />
-                <Typography variant="h6" className="navbar_button">Hello,User</Typography>
+                <Typography fontSize={'20px'} className="navbar_button">Hello Deep </Typography>
                 {/* <Link href="">
                   <a className="navbar_button">
                     <Button
@@ -216,9 +216,9 @@ const Navbar = ({
                     />
                   </a>
                 </Link> */}
-                <Link href="#">
+                <Link href="/">
                   <a className="navbar_button_two">
-                    <Button {...button} title="LogOut" />
+                    <Button {...button} title="Logout" />
                   </a>
                 </Link>
                 {!matches && (
