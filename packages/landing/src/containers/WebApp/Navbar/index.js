@@ -42,7 +42,7 @@ const MENU_ITEMS_2 = [
   },
   {
     label: 'Subscription',
-    path: '/home/dashboard',
+    path: '/home/subscription',
   },
   {
     label: 'History',
