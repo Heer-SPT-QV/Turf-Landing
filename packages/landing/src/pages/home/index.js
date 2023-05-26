@@ -10,18 +10,19 @@ import GlobalStyle, {
 } from "containers/WebApp/webApp.style";
 import Sticky from "react-stickynode";
 import Banner2 from "containers/WebApp/Banner/indexH";
+import ExtraDetails from "./ExtraDetails";
 
 
 function Home() {
   const [open, setOpen] = useState(false);
-  return (
+  return (<>
     <ThemeProvider theme={theme}>
       <ResetCSS />
       <GlobalStyle />
       <AppWrapper>
         {/* <Sticky top={0} innerZ={9999} activeClass="sticky-nav-active">
           <DrawerProvider>
-            <Navbar open={open} setOpen={setOpen} s={1} />
+          <Navbar open={open} setOpen={setOpen} s={1} />
           </DrawerProvider>
         </Sticky> */}
         <ContentWrapper>
@@ -29,7 +30,8 @@ function Home() {
         </ContentWrapper>
       </AppWrapper>
     </ThemeProvider>
-  );
+    <ExtraDetails/>
+    </>);
 }
 
 export default Home;

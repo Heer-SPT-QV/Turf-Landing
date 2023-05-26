@@ -16,11 +16,10 @@ function Subscription() {
       <ResetCSS />
       <GlobalStyle />
       <AppWrapper>
-        <ContentWrapper>
-          <Banner2 />
-       
-        
+        <ContentWrapper>  
+          <Banner2 />   
         </ContentWrapper>
+               
       </AppWrapper>
     </ThemeProvider>
   );

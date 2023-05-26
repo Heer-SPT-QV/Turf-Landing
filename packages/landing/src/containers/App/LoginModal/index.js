@@ -84,7 +84,7 @@ const LoginModal = ({
         className={status === "ph" ? "default2" : "default"}
         title={status === "ph" ? "REQUEST OTP" : "LOGIN"}
         {...btnStyle}
-        disabled={number === "" || error !== "" || ( status!== "ph" && otp==="")}
+        disabled={number === "" || error !== "" || (status !== "ph" && otp === "")}
         onClick={() => {
           if (status === "ph") {
             setLoading(true);
@@ -120,7 +120,7 @@ const LoginModal = ({
           content.lName === "" &&
           content.bName === "" &&
           content.email === "" &&
-          content.mob == "" 
+          content.mob == ""
         }
       />
     </Fragment>
@@ -149,8 +149,8 @@ const LoginModal = ({
                 }
               }}
               activeKey={defaultTab}
-              // renderTabBar={() => <ScrollableInkTabBar />}
-              // renderTabContent={() => <TabContent />}
+            // renderTabBar={() => <ScrollableInkTabBar />}
+            // renderTabContent={() => <TabContent />}
             >
               <TabPane tab="LOGIN" key="loginForm">
                 <Heading content="Welcome Folk" {...titleStyle} />
@@ -206,29 +206,29 @@ const LoginModal = ({
                       </Typography>
                     )}
                     {timer === 0 && (
-                     
-                        <Typography
-                          onClick={() => {
-                            caller();
-                            setOtpS(true);
-                          }}
-                          sx={{
-                            ":hover": {
-                              color: "red",
-                              cursor: "pointer",
-                            },
-                            fontSize: "22px",
-                          }}
-                          style={{
-                            textAlign: "right",
-                            fontSize: "10px",
-                            color: "blue",
-                            
-                          }}
-                        >
-                          Resend OTP
-                        </Typography>
-                      
+
+                      <Typography
+                        onClick={() => {
+                          caller();
+                          setOtpS(true);
+                        }}
+                        sx={{
+                          ":hover": {
+                            color: "red",
+                            cursor: "pointer",
+                          },
+                          fontSize: "22px",
+                        }}
+                        style={{
+                          textAlign: "right",
+                          fontSize: "10px",
+                          color: "blue",
+
+                        }}
+                      >
+                        Resend OTP
+                      </Typography>
+
                     )}
                   </>
                 )}
