@@ -27,6 +27,15 @@ function ExtraDetails(
         state: "",
         pincode: "",
     });
+
+    const [gstError,setgstError]=useState(null)
+    const [apiError,setapiError]=useState(null)
+    const [keyError,setkeyError]=useState(null)
+    const [addressError,setAddressError]=useState(null)
+    const [cityError,setCityError]=useState(null)
+    const [stateError,setstateError]=useState(null)
+    const [pincodeError,setpincodeError]=useState(null)
+
     const SubmitButtonGrp = () => (
         <Fragment>
             <Button
@@ -35,12 +44,12 @@ function ExtraDetails(
                 {...btnStyle}
                 // onClick={handleRegister}
                 disabled={
-                    content.gst === "" &&
-                    content.rpayapi === "" &&
-                    content.rpaykey === "" &&
-                    content.address === "" &&
-                    content.city === "" &&
-                    content.state === "" &&
+                    content.gst === "" ||
+                    content.rpayapi === "" ||
+                    content.rpaykey === "" ||
+                    content.address === "" ||
+                    content.city === "" ||
+                    content.state === "" ||
                     content.pincode === ""
                 }
             />
@@ -54,51 +63,101 @@ function ExtraDetails(
                         isMaterial
                         label="GST No"
                         onChange={(e) => {
-                            setContent({ ...content, gst: e });
+                            const gst=/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(e)
+                            if(!gst){
+                                setgstError("Invaild GSTIN")
+                            }else{
+                                setgstError(null)
+                                setContent({ ...content, gst: e });
+                            }
+
                         }}
                     />
+                    {gstError && <span style={{color:'red'}}>{gstError}</span>}
                     <Input
                         isMaterial
                         label="RazerPay API"
                         onChange={(e) => {
+                            const apiValid=/^rzp_test_[0-9a-zA-Z]{30}$|^rzp_live_[0-9a-zA-Z]{30}$/ 
+                            
+                            if(!apiValid){
+                                setapiError("Invaild API")
+                            }else{
+                                setapiError(null)}
                             setContent({ ...content, rpayapi: e });
                         }}
                     />
+                    {apiError && <span style={{color:'red'}}>{apiError}</span>}
+
                     <Input
                         isMaterial
                         label="RazerPay key"
                         onChange={(e) => {
+                            const keyValid=/^rzp_test_[0-9a-zA-Z]{30}$|^rzp_live_[0-9a-zA-Z]{30}$/
+
+                            if(!keyValid){
+                                setkeyError("Invaild GSTIN")
+                            }else{
+                                setkeyError(null)}
                             setContent({ ...content, rpaykey: e });
                         }}
                     />
+                    {keyError && <span style={{color:'red'}}>{keyError}</span>}
+
                     <Input
                         isMaterial
                         label="Address"
                         onChange={(e) => {
-                            setContent({ ...content, address: e });
+                            if(e===""){
+                                setAddressError('Enter Address')
+                            }else{
+                                setAddressError(null)
+                                setContent({ ...content, address: e });
+                            }
                         }}
                     />
+                    {addressError && <span style={{color:'red'}}>{addressError}</span>}
                     <Input
                         isMaterial
                         label="City"
                         onChange={(e) => {
+                            if(e===""){
+                                setCityError('Enter City')
+                            }else{
+                                setCityError(null)
                             setContent({ ...content, city: e });
+                            }
                         }}
                     />
+                    {cityError && <span style={{color:'red'}}>{cityError}</span>}
+
                     <Input
                         isMaterial
                         label="State"
                         onChange={(e) => {
+                            if(e===""){
+                                setstateError('Enter state')
+                            }else{
+                                setstateError(null)
                             setContent({ ...content, state: e });
-                        }}
+                        }}}
                     />
+                    {stateError && <span style={{color:'red'}}>{stateError}</span>}
+
                     <Input
                         isMaterial
                         label="Pincode"
                         onChange={(e) => {
+                            const pin=/^\d{6}$/.test(e)
+                            if(!pin){
+                                setpincodeError('Enter valid pincode')
+                            }else{
+                                setpincodeError(null)
                             setContent({ ...content, pincode: e });
-                        }}
+                        }}}
                     />
+                    {pincodeError && <span style={{color:'red'}}>{pincodeError}</span>}
+
                 </div>
                 <Box>
                     <SubmitButtonGrp />

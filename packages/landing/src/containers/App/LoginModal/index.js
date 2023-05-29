@@ -60,6 +60,11 @@ const LoginModal = ({
   const [otp, setOtp] = useState("");
   const router = useRouter();
   const [error, setError] = useState("");
+  const [ferror, setFError] = useState("");
+  const [lerror, setLError] = useState("");
+  const [berror, setBError] = useState("");
+  const [mailError, setMailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [loading, setLoading] = useState(false);
   const [otpS, setOtpS] = useState();
   const [timer, setTimer] = useState(35);
@@ -116,11 +121,16 @@ const LoginModal = ({
         {...btnStyle}
         onClick={handleRegister}
         disabled={
-          content.fName === "" &&
-          content.lName === "" &&
-          content.bName === "" &&
-          content.email === "" &&
-          content.mob == ""
+          content.fName === "" ||
+          content.lName === "" ||
+          content.bName === "" ||
+          content.email === "" ||
+          content.mob == "0"||
+          ferror!==null ||
+          lerror!==null ||
+          berror!==null ||
+          mailError!==null 
+          // phoneError!==null
         }
       />
     </Fragment>
@@ -167,18 +177,17 @@ const LoginModal = ({
                   label="Phone number"
                   value={number}
                   onChange={(e) => {
-                    const x = /^[0-9]+$/.test(e);
-                    console.log(x, "hhjhjh", typeof e);
+                    const x = /^(0|91)?[6-9][0-9]{9}$/.test(e);
 
                     if (e === "" || e.length === 10) {
                       if (e === "") {
-                        setError("e");
+                        setError("Enter Phone number");
                       } else {
                         setError("");
                         setNumber(e);
                       }
-                    } else if (x || e.length < 10 || e.length > 10) {
-                      setError("Please eneter only 10 digits");
+                    }  else if (x || e.length < 10 || e.length > 10) {
+                      setError("Please enter only 10 digits");
                     } else if (!x) {
                       setError("Please enter Only number");
                     } else {
@@ -186,6 +195,7 @@ const LoginModal = ({
                     }
                   }}
                 />
+                {error && <span style={{ color: 'red' }}>{error}</span>}
 
                 {loading && <CircularProgress />}
                 {status !== "ph" && (
@@ -248,27 +258,49 @@ const LoginModal = ({
                   isMaterial
                   label="First name"
                   onChange={(e) => {
-                    setContent({ ...content, fName: e });
+                    const nameRegex = /^[A-Z][a-z]*$/.test(e);
+                    if (!nameRegex) {
+                      setFError("First letter must be capital and only letters")
+                    } else {
+                      setFError(null)
+                      setContent({ ...content, fName: e });
+                    }
                   }}
                 />
+                {ferror && <span style={{ color: 'red' }}>{ferror}</span>}
                 <Input
                   isMaterial
                   label="Last name"
                   //   value={content.lName}
                   onChange={(e) => {
-                    // console.log(e);
-                    setContent({ ...content, lName: e });
+                    const nameRegex = /^[A-Z][a-z]*$/.test(e);
+                    if (!nameRegex) {
+                      setLError("First letter must be capital and only letters")
+                    } else {
+                      setLError(null)
+                      // console.log(e);
+                      setContent({ ...content, lName: e });
+                    }
                   }}
                 />
+                {lerror && <span style={{ color: 'red' }}>{lerror}</span>}
                 <Input
                   isMaterial
                   label="Business name"
                   //   value={content.bName}
                   onChange={(e) => {
-                    // console.log(e)
-                    setContent({ ...content, bName: e });
+                    const nameRegex = /^[A-Z][a-z]*$/.test(e);
+                    if (!nameRegex) {
+                      setBError("First letter must be capital and only letters")
+                    } else {
+                      setBError(null)
+                      // console.log(e)
+                      setContent({ ...content, bName: e });
+
+                    }
                   }}
                 />
+                {berror && <span style={{ color: 'red' }}>{berror}</span>}
                 <Input
                   inputType="email"
                   isMaterial
@@ -278,26 +310,34 @@ const LoginModal = ({
                     const x = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(e)
 
                     if (!x) {
-                      console.log('invaild')
-                      setError('Invaild mail')
+                      // console.log('invaild')
+                      setMailError('Invaild mail')
                     } else {
-                      setError(null)
-                      console.log('valid')
+                      setMailError(null)
+                      // console.log('valid')
                       setContent({ ...content, email: e });
                     }
 
                   }}
                 />
-                {error && <span style={{ color: 'red' }}>{error}</span>}
-              
+                {mailError && <span style={{ color: 'red' }}>{mailError}</span>}
+
                 <Input
                   inputType="number"
                   isMaterial
                   label="Phone number"
                   onChange={(e) => {
-                    setContent({ ...content, mob: e });
+                    const num = /^(0|91)?[6-9][0-9]{9}$/.test(e)
+
+                    if (!num) {
+                      setPhoneError('Enter Valid Phone number')
+                    } else {
+                      setPhoneError(null)
+                      setContent({ ...content, mob: e });
+                    }
                   }}
                 />
+                {phoneError && <span style={{ color: 'red' }}>{phoneError}</span>}
                 <div>
                   <SignupButtonGroup />
                 </div>
