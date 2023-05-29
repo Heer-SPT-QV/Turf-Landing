@@ -125,6 +125,7 @@ const LoginModal = ({
       />
     </Fragment>
   );
+
   return (
     <LoginModalWrapper>
       <Box className="row" {...row}>
@@ -274,9 +275,21 @@ const LoginModal = ({
                   label="Email Address"
                   //   value={content.email}
                   onChange={(e) => {
-                    setContent({ ...content, email: e });
+                    const x = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(e)
+
+                    if (!x) {
+                      console.log('invaild')
+                      setError('Invaild mail')
+                    } else {
+                      setError(null)
+                      console.log('valid')
+                      setContent({ ...content, email: e });
+                    }
+
                   }}
                 />
+                {error && <span style={{ color: 'red' }}>{error}</span>}
+              
                 <Input
                   inputType="number"
                   isMaterial

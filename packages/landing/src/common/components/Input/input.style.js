@@ -106,7 +106,7 @@ const InputField = styled.div`
     }
 
     textarea {
-      min-height: 40px;
+      min-height: 50px;
       padding-bottom: 0;
     }
 
