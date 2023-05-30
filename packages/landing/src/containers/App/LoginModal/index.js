@@ -125,12 +125,12 @@ const LoginModal = ({
           content.lName === "" ||
           content.bName === "" ||
           content.email === "" ||
-          content.mob == "0"||
-          ferror!==null ||
-          lerror!==null ||
-          berror!==null ||
-          mailError!==null 
-          // phoneError!==null
+          content.mob == "0" ||
+          ferror !== null ||
+          lerror !== null ||
+          berror !== null ||
+          mailError !== null||
+          phoneError!==null
         }
       />
     </Fragment>
@@ -171,31 +171,40 @@ const LoginModal = ({
                 />
                 <br />
                 <br />
+                <div style={{ position: 'relative' }}>
+                  <Input
+                    isMaterial
+                    label="Phone number"
+                    value={number}
+                    onChange={(e) => {
+                      const x = /^(0|91)?[6-9][0-9]{9}$/.test(e);
 
-                <Input
-                  isMaterial
-                  label="Phone number"
-                  value={number}
-                  onChange={(e) => {
-                    const x = /^(0|91)?[6-9][0-9]{9}$/.test(e);
-
-                    if (e === "" || e.length === 10) {
-                      if (e === "") {
+                      if (!x) {
                         setError("Enter Phone number");
                       } else {
                         setError("");
                         setNumber(e);
                       }
-                    }  else if (x || e.length < 10 || e.length > 10) {
-                      setError("Please enter only 10 digits");
-                    } else if (!x) {
-                      setError("Please enter Only number");
-                    } else {
-                      setNumber(e);
-                    }
-                  }}
-                />
-                {error && <span style={{ color: 'red' }}>{error}</span>}
+
+                      // if (e === "" || e.length === 10) {
+                      //   if (e === "") {
+                      //     setError("Enter Phone number");
+                      //   } else {
+                      //     setError("");
+                      //     setNumber(e);
+                      //   }
+                      // } else if (x || e.length < 10 || e.length > 10) {
+                      //   setError("Please enter only 10 digits");
+                      // } else if (!x) {
+                      //   setError("Please enter Only number");
+                      // } else {
+                      //   setNumber(e);
+                      // }
+                    }}
+                  />
+                  {error && <span style={{ color: 'red', position: 'absolute', top: '44px' }}>{error}</span>}
+                  {error && <div style={{ height: '14px' }} />}
+                </div>
 
                 {loading && <CircularProgress />}
                 {status !== "ph" && (
@@ -254,90 +263,110 @@ const LoginModal = ({
                 />
                 <br />
                 <br />
-                <Input
-                  isMaterial
-                  label="First name"
-                  onChange={(e) => {
-                    const nameRegex = /^[A-Z][a-z]*$/.test(e);
-                    if (!nameRegex) {
-                      setFError("First letter must be capital and only letters")
-                    } else {
-                      setFError(null)
-                      setContent({ ...content, fName: e });
-                    }
-                  }}
-                />
-                {ferror && <span style={{ color: 'red' }}>{ferror}</span>}
-                <Input
-                  isMaterial
-                  label="Last name"
-                  //   value={content.lName}
-                  onChange={(e) => {
-                    const nameRegex = /^[A-Z][a-z]*$/.test(e);
-                    if (!nameRegex) {
-                      setLError("First letter must be capital and only letters")
-                    } else {
-                      setLError(null)
-                      // console.log(e);
-                      setContent({ ...content, lName: e });
-                    }
-                  }}
-                />
-                {lerror && <span style={{ color: 'red' }}>{lerror}</span>}
-                <Input
-                  isMaterial
-                  label="Business name"
-                  //   value={content.bName}
-                  onChange={(e) => {
-                    const nameRegex = /^[A-Z][a-z]*$/.test(e);
-                    if (!nameRegex) {
-                      setBError("First letter must be capital and only letters")
-                    } else {
-                      setBError(null)
-                      // console.log(e)
-                      setContent({ ...content, bName: e });
+                <div style={{ position: 'relative' }}>
+                  <Input
+                    isMaterial
+                    label="First name"
+                    onChange={(e) => {
+                      const nameRegex = /^[A-Z][a-z]*$/.test(e);
+                      if (!nameRegex) {
+                        setFError("First letter must be capital and only letters")
+                      } else {
+                        setFError(null)
+                        setContent({ ...content, fName: e });
+                      }
+                    }}
+                  />
+                  {ferror && <span style={{ color: 'red', position: 'absolute', top: '44px' }}>{ferror}</span>}
+                  {ferror && <div style={{ height: '14px' }}></div>}
+                </div>
 
-                    }
-                  }}
-                />
-                {berror && <span style={{ color: 'red' }}>{berror}</span>}
-                <Input
-                  inputType="email"
-                  isMaterial
-                  label="Email Address"
-                  //   value={content.email}
-                  onChange={(e) => {
-                    const x = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(e)
+                <div style={{ position: 'relative' }}>
+                  <Input
+                    isMaterial
+                    label="Last name"
+                    //   value={content.lName}
+                    onChange={(e) => {
+                      const nameRegex = /^[A-Z][a-z]*$/.test(e);
+                      if (!nameRegex) {
+                        setLError("First letter must be capital and only letters")
+                      } else {
+                        setLError(null)
+                        // console.log(e);
+                        setContent({ ...content, lName: e });
+                      }
+                    }}
+                  />
+                  {lerror && <span style={{ color: 'red', position: 'absolute', top: '44px' }}>{lerror}</span>}
+                  {lerror && <div style={{ height: '14px' }}></div>}
+                </div>
 
-                    if (!x) {
-                      // console.log('invaild')
-                      setMailError('Invaild mail')
-                    } else {
-                      setMailError(null)
-                      // console.log('valid')
-                      setContent({ ...content, email: e });
-                    }
+                <div style={{ position: 'relative' }}>
+                  <Input
+                    isMaterial
+                    label="Business name"
+                    //   value={content.bName}
+                    onChange={(e) => {
+                      const nameRegex = /^[A-Z][a-z]*$/.test(e);
+                      if (!nameRegex) {
+                        setBError("First letter must be capital and only letters")
+                      } else {
+                        setBError(null)
+                        // console.log(e)
+                        setContent({ ...content, bName: e });
 
-                  }}
-                />
-                {mailError && <span style={{ color: 'red' }}>{mailError}</span>}
+                      }
+                    }}
+                  />
+                  {berror && <span style={{ color: 'red', position: 'absolute', top: '44px' }}>{berror}</span>}
+                  {berror && <div style={{ height: '14px' }}></div>}
+                </div>
 
-                <Input
-                  inputType="number"
-                  isMaterial
-                  label="Phone number"
-                  onChange={(e) => {
-                    const num = /^(0|91)?[6-9][0-9]{9}$/.test(e)
 
-                    if (!num) {
-                      setPhoneError('Enter Valid Phone number')
-                    } else {
-                      setPhoneError(null)
-                      setContent({ ...content, mob: e });
-                    }
-                  }}
-                />
-                {phoneError && <span style={{ color: 'red' }}>{phoneError}</span>}
+                <div style={{ position: 'relative' }}>
+                  <Input
+                    inputType="email"
+                    isMaterial
+                    label="Email Address"
+                    //   value={content.email}
+                    onChange={(e) => {
+                      const x = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(e)
+
+                      if (!x) {
+                        // console.log('invaild')
+                        setMailError('Invaild mail')
+                      } else {
+                        setMailError(null)
+                        // console.log('valid')
+                        setContent({ ...content, email: e });
+                      }
+
+                    }}
+                  />
+                  {mailError && <span style={{ color: 'red', position: 'absolute', top: '44px' }}>{mailError}</span>}
+                  {mailError && <div style={{ height: '14px' }}></div>}
+                </div>
+
+                <div style={{ position: 'relative' }}>
+                  <Input
+                    inputType="number"
+                    isMaterial
+                    label="Phone number"
+                    onChange={(e) => {
+                      const num = /^(0|91)?[6-9][0-9]{9}$/.test(e)
+
+                      if (!num) {
+                        setPhoneError('Enter Valid Phone number')
+                      } else {
+                        setPhoneError(null)
+                        setContent({ ...content, mob: e });
+                      }
+                    }}
+                  />
+                  {phoneError && <span style={{ color: 'red', position: 'absolute', top: '44px' }}>{phoneError}</span>}
+                  {phoneError && <div style={{ height: '14px' }}></div>}
+                </div>
+
                 <div>
                   <SignupButtonGroup />
                 </div>
