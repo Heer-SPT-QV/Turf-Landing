@@ -23,6 +23,12 @@ import { display } from "styled-system";
 import BannerArea from "containers/WebApp/Banner/banner2.style";
 // import BannerArea, { Col } from "./banner.style";
 // import styles from "./banner2.module.css";
+// import { ThemeProvider } from "styled-components";
+// import { theme } from "common/theme/webApp";
+
+import Banner2 from "containers/WebApp/Banner/indexH";
+
+// import { Box } from "@mui/material";
 
 function ExtraDetails(row, col, btnStyle, contentWrapper) {
   const [content, setContent] = useState({
@@ -296,6 +302,163 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
       </AppWrapper>
     </ThemeProvider>
   );
+    
+    return (
+        <ThemeProvider theme={theme}>
+            <ResetCSS />
+            <GlobalStyle />
+            <AppWrapper>
+                <ContentWrapper>
+                    <LoginModalWrapper>
+                        <Box className="row" style={{ display: 'flex' }}>
+                            <Box className="col imageCol" style={{ width: '70%',flex:1 }}  >
+                                <Image
+                                    className="patternImage"
+                                    src={LoginImage?.src}
+                                    alt="Login Banner" />
+                            </Box>
+                            <Box className="col tabCol" {...col} style={{border:'2px solid red',flex:1}}>
+                                <Box {...contentWrapper} style={{width:'400px',padding:'30px'}}>
+
+                                    <h1 style={{ paddingBottom: '10px' }}>Extra details</h1>
+
+                                    <div style={{ position: 'relative' }}>
+                                        <Input
+                                            isMaterial
+                                            label="GST No"
+                                            onChange={(e) => {
+                                                const gst = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(e)
+                                                if (!gst || e === "") {
+                                                    setgstError("Invaild GSTIN")
+                                                } else {
+                                                    setgstError(null)
+                                                    setContent({ ...content, gst: e });
+                                                }
+
+                                            }}
+                                        />
+                                        {gstError && <span style={{ color: 'red', position: 'absolute', top: '40px' }}>{gstError}</span>}
+                                        {gstError && <div style={{ height: '25px' }} />}</div>
+
+                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
+                                        <Input
+                                            isMaterial
+                                            label="RazerPay API"
+                                            onChange={(e) => {
+                                                const apiValid = /^rzp_test_[0-9a-zA-Z]{30}$|^rzp_live_[0-9a-zA-Z]{30}$/
+
+                                                if (!apiValid || e === "") {
+                                                    setapiError("Invaild API")
+                                                } else {
+                                                    setapiError(null)
+                                                }
+                                                setContent({ ...content, rpayapi: e });
+                                            }}
+                                        />
+                                        {apiError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{apiError}</span>}
+                                        {apiError && <div style={{ height: '25px' }} />}</div>
+
+                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
+                                        <Input
+                                            isMaterial
+                                            label="RazerPay key"
+                                            onChange={(e) => {
+                                                const keyValid = /^rzp_test_[0-9a-zA-Z]{30}$|^rzp_live_[0-9a-zA-Z]{30}$/
+
+                                                if (!keyValid || e === "") {
+                                                    setkeyError("Invaild GSTIN")
+                                                } else {
+                                                    setkeyError(null)
+                                                }
+                                                setContent({ ...content, rpaykey: e });
+                                            }}
+                                        />
+                                        {keyError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{keyError}</span>}
+                                        {keyError && <div style={{ height: '25px' }} />}</div>
+
+                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
+                                        <Input
+                                            isMaterial
+                                            label="Address"
+                                            onChange={(e) => {
+                                                if (e === "") {
+                                                    setAddressError('Enter Address')
+                                                } else {
+                                                    setAddressError(null)
+                                                    setContent({ ...content, address: e });
+                                                }
+                                            }}
+                                        />
+                                        {addressError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{addressError}</span>}
+                                        {addressError && <div style={{ height: '25px' }} />}
+
+                                    </div>
+
+                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
+                                        <Input
+                                            isMaterial
+                                            label="City"
+                                            onChange={(e) => {
+                                                if (e === "") {
+                                                    setCityError('Enter City')
+                                                } else {
+                                                    setCityError(null)
+                                                    setContent({ ...content, city: e });
+                                                }
+                                            }}
+                                        />
+                                        {cityError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{cityError}</span>}
+                                        {cityError && <div style={{ height: '25px' }} />}</div>
+
+                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
+
+                                        <Input
+                                            isMaterial
+                                            label="State"
+                                            onChange={(e) => {
+                                                if (e === "") {
+                                                    setstateError('Enter state')
+                                                } else {
+                                                    setstateError(null)
+                                                    setContent({ ...content, state: e });
+                                                }
+                                            }}
+                                        />
+                                        {stateError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{stateError}</span>}
+                                        {stateError && <div style={{ height: '25px' }} />}</div>
+
+
+                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
+                                        <Input
+                                            isMaterial
+                                            label="Pincode"
+                                            onChange={(e) => {
+                                                const pin = /^\d{6}$/.test(e)
+                                                if (!pin) {
+                                                    setpincodeError('Enter valid pincode')
+                                                } else {
+                                                    setpincodeError(null)
+                                                    setContent({ ...content, pincode: e });
+                                                }
+                                            }}
+                                        />
+                                        {pincodeError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{pincodeError}</span>}
+                                        {pincodeError && <div style={{ height: '10px' }} />}</div>
+
+
+                                    <Box paddingTop='30px'>
+                                        <SubmitButtonGrp />
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>
+
+                    </LoginModalWrapper>
+                </ContentWrapper>
+
+            </AppWrapper>
+        </ThemeProvider>
+    )
 }
 
 // ExtraDetails style props
