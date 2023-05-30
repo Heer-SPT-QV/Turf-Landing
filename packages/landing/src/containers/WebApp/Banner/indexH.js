@@ -184,11 +184,11 @@ const Banner2 = () => {
           })}
         </Grid>
       </Container>
-      <Box className="bannerImage">
+      {/* <Box className="bannerImage">
         {image.map(({ src }, index) => (
           <Image src={src} alt="" key={`banner-image-key-${index}`} />
         ))}
-      </Box>
+      </Box> */}
     </BannerArea>
   );
 };
