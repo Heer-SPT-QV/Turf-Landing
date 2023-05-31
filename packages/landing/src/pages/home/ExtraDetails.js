@@ -12,6 +12,7 @@ import Image from "common/components/Image";
 import ResetCSS from "common/assets/css/style";
 // import React, { useState } from "react";
 import { ThemeProvider } from "styled-components";
+
 import { theme } from "common/theme/webApp";
 import GlobalStyle, {
     AppWrapper,
@@ -113,6 +114,8 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
                                                     style={{
                                                         color: "red",
                                                         position: "absolute",
+                                                        
+                                                        
                                                         top: "40px",
                                                     }}
                                                 >

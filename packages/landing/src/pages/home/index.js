@@ -30,7 +30,6 @@ function Home() {
         </ContentWrapper>
       </AppWrapper>
     </ThemeProvider>
-    <ExtraDetails/>
     </>);
 }
 
