@@ -94,6 +94,8 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
 
                                         <div style={{ position: "relative" }}>
                                             <Input
+
+                                            
                                                 isMaterial
                                                 label="GST No"
                                                 onChange={(e) => {
@@ -115,7 +117,7 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
                                                         color: "red",
                                                         position: "absolute",
                                                         
-                                                        
+
                                                         top: "40px",
                                                     }}
                                                 >
@@ -372,6 +374,7 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
                                                 if (!keyValid || e === "") {
                                                     setkeyError("Invaild GSTIN")
                                                 } else {
+                                    
                                                     setkeyError(null)
                                                 }
                                                 setContent({ ...content, rpaykey: e });
