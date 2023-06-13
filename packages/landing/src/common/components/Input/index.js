@@ -205,6 +205,7 @@ Input.propTypes = {
     'password',
     'number',
     'textarea',
+    'BigInt'
   ]),
 
   /** Add icon in input field. This prop will not work with password

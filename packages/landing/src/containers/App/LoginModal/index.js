@@ -33,15 +33,15 @@ const LoginModal = ({
   setOpen,
 }) => {
   const [content, setContent] = useState({
-    fName: "",
-    lName: "",
-    bName: "",
+    firstName: "",
+    lastName: "",
+    businessName: "",
     email: "",
-    mob: 0,
+    phoneNumber: 0,
   });
 
   function caller() {
-    let t = 35;
+    let t = 10;
     const timerr = setInterval(() => {
       if (t === 0) {
         clearInterval(timerr);
@@ -67,21 +67,129 @@ const LoginModal = ({
   const [phoneError, setPhoneError] = useState("");
   const [loading, setLoading] = useState(false);
   const [otpS, setOtpS] = useState();
-  const [timer, setTimer] = useState(35);
+  const [otpF, setOtpF] = useState();
+  const [timer, setTimer] = useState(10);
 
-  function handleRegister() {
-    setDefaultTab("loginForm");
-    setActive(true);
-    setNumber(content.mob);
-    console.log(content.mob);
+  async function logIn() {
+    const num = Number(number)
+    console.log(num)
+
+    const result = await fetch(`http://192.168.1.19/api/Business/Login?PhoneNumber=${num}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': '*/*',
+        },
+        // body: JSON.stringify(item)
+      });
+    try {
+      var response = await result.json();
+    } catch (error) {
+      console.log("Error parsing JSON:", error)
+    }
+
+    if (result.ok) {
+      try {
+        localStorage.setItem("user-info", JSON.stringify(response));
+      } catch (error) {
+        console.error("Error storing data in local storage:", error);
+      }
+      // localStorage.setItem("user-info", JSON.stringify(response));
+
+      if (status === "ph") {
+        setLoading(true);
+        setTimeout(() => {
+          setOtpS(true);
+          setStatus("otp");
+          setLoading(false);
+          caller();
+        }, 2000);
+      } else {
+        const var_otp= Number(otp)
+        const varify = await fetch(`http://192.168.1.19/api/Business/VerifyLogin?PhoneNumber=${num}&Otp=${var_otp}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+          }
+        })
+        try {
+          const response = await varify.json();
+        } catch (error) {
+          console.log("Error parsing JSON:", error)
+        }
+
+        if(varify.ok){
+          try{
+            router.push("/home/ExtraDetails");
+            setOpen(false);
+            closeModal();
+          }catch(error){
+            console.warn(`varification error`,error)
+          }
+        }
+      }
+    } else {
+      // Handle error here
+      console.error("Phone number not sent successfully");
+      setOtpF(true);
+    }
   }
+  async function handleRegister() {
+    // setDefaultTab("loginForm");
+    // setActive(true);
+    // setNumber(content.phoneNumber);
+
+    const items = { content }
+    const convertedData = {
+      ...content,
+      phoneNumber: Number(content.phoneNumber)
+    };
+    try {
+      await fetch('http://192.168.1.19/api/Business/SignUp', {
+        method: 'POST',
+        body: JSON.stringify(convertedData),
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'application/json',
+          // 'Access-Control-Allow-Origin': 'https://j5z79vvz-80.asse.devtunnels.ms/api/Business/SignUp'
+
+        }
+      })
+
+      console.log(convertedData)
+
+      // result = await result.json()
+      // console.log(result)
+      if (response.ok) {
+        // Request successful
+        const result = await response.json();
+        console.log(result);
+        setDefaultTab("loginForm");
+        setActive(true);
+        setNumber(content.phoneNumber);
+
+
+      } else {
+        // Request failed
+        console.error('Error:', response.status);
+      }
+    } catch (error) {
+      console.log('Error:', error)
+    }
+  }
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
 
     setOtpS(false);
+    setOtpF(false);
   };
+
+
 
   const LoginButtonGroup = () => (
     <Fragment>
@@ -90,21 +198,8 @@ const LoginModal = ({
         title={status === "ph" ? "REQUEST OTP" : "LOGIN"}
         {...btnStyle}
         disabled={number === "" || error !== "" || (status !== "ph" && otp === "")}
-        onClick={() => {
-          if (status === "ph") {
-            setLoading(true);
-            setTimeout(() => {
-              setOtpS(true);
-              setStatus("otp");
-              setLoading(false);
-              caller();
-            }, [2000]);
-          } else {
-            router.push("/home");
-            setOpen(false);
-            closeModal();
-          }
-        }}
+        onClick={logIn}
+
       />
       {/* <Button
 				title="Forget Password"
@@ -121,16 +216,16 @@ const LoginModal = ({
         {...btnStyle}
         onClick={handleRegister}
         disabled={
-          content.fName === "" ||
-          content.lName === "" ||
-          content.bName === "" ||
+          content.firstName === "" ||
+          content.lastName === "" ||
+          content.businessName === "" ||
           content.email === "" ||
-          content.mob == "0" ||
+          content.phoneNumber == "0" ||
           ferror !== null ||
           lerror !== null ||
           berror !== null ||
-          mailError !== null||
-          phoneError!==null
+          mailError !== null ||
+          phoneError !== null
         }
       />
     </Fragment>
@@ -185,21 +280,6 @@ const LoginModal = ({
                         setError("");
                         setNumber(e);
                       }
-
-                      // if (e === "" || e.length === 10) {
-                      //   if (e === "") {
-                      //     setError("Enter Phone number");
-                      //   } else {
-                      //     setError("");
-                      //     setNumber(e);
-                      //   }
-                      // } else if (x || e.length < 10 || e.length > 10) {
-                      //   setError("Please enter only 10 digits");
-                      // } else if (!x) {
-                      //   setError("Please enter Only number");
-                      // } else {
-                      //   setNumber(e);
-                      // }
                     }}
                   />
                   {error && <span style={{ color: 'red', position: 'absolute', top: '44px' }}>{error}</span>}
@@ -266,6 +346,7 @@ const LoginModal = ({
                 <div style={{ position: 'relative' }}>
                   <Input
                     isMaterial
+                    value={content.firstName}
                     label="First name"
                     onChange={(e) => {
                       const nameRegex = /^[A-Z][a-z]*$/.test(e);
@@ -273,7 +354,7 @@ const LoginModal = ({
                         setFError("First letter must be capital and only letters")
                       } else {
                         setFError(null)
-                        setContent({ ...content, fName: e });
+                        setContent({ ...content, firstName: e });
                       }
                     }}
                   />
@@ -285,7 +366,7 @@ const LoginModal = ({
                   <Input
                     isMaterial
                     label="Last name"
-                    //   value={content.lName}
+                    //   value={content.lastName}
                     onChange={(e) => {
                       const nameRegex = /^[A-Z][a-z]*$/.test(e);
                       if (!nameRegex) {
@@ -293,7 +374,7 @@ const LoginModal = ({
                       } else {
                         setLError(null)
                         // console.log(e);
-                        setContent({ ...content, lName: e });
+                        setContent({ ...content, lastName: e });
                       }
                     }}
                   />
@@ -305,7 +386,7 @@ const LoginModal = ({
                   <Input
                     isMaterial
                     label="Business name"
-                    //   value={content.bName}
+                    //   value={content.businessName}
                     onChange={(e) => {
                       const nameRegex = /^[A-Z][a-z]*$/.test(e);
                       if (!nameRegex) {
@@ -313,7 +394,7 @@ const LoginModal = ({
                       } else {
                         setBError(null)
                         // console.log(e)
-                        setContent({ ...content, bName: e });
+                        setContent({ ...content, businessName: e });
 
                       }
                     }}
@@ -349,7 +430,6 @@ const LoginModal = ({
 
                 <div style={{ position: 'relative' }}>
                   <Input
-                    inputType="number"
                     isMaterial
                     label="Phone number"
                     onChange={(e) => {
@@ -359,7 +439,7 @@ const LoginModal = ({
                         setPhoneError('Enter Valid Phone number')
                       } else {
                         setPhoneError(null)
-                        setContent({ ...content, mob: e });
+                        setContent({ ...content, phoneNumber: e });
                       }
                     }}
                   />
@@ -379,6 +459,15 @@ const LoginModal = ({
                 sx={{ width: "100%" }}
               >
                 An OTP has been sent Sucessfully!!
+              </Alert>
+            </Snackbar>
+            <Snackbar open={otpF} autoHideDuration={6000} onClose={handleClose}>
+              <Alert
+                onClose={handleClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                An OTP has not been sent Sucessfully!!
               </Alert>
             </Snackbar>
           </Box>

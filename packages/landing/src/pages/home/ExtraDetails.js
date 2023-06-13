@@ -12,6 +12,9 @@ import Image from "common/components/Image";
 import ResetCSS from "common/assets/css/style";
 // import React, { useState } from "react";
 import { ThemeProvider } from "styled-components";
+import { useRouter } from "next/router";
+
+
 
 import { theme } from "common/theme/webApp";
 import GlobalStyle, {
@@ -28,10 +31,13 @@ import BannerArea from "containers/WebApp/Banner/banner2.style";
 // import { theme } from "common/theme/webApp";
 
 import Banner2 from "containers/WebApp/Banner/indexH";
+import { Router } from "react-router-dom";
 
 // import { Box } from "@mui/material";
 
 function ExtraDetails(row, col, btnStyle, contentWrapper) {
+const router = useRouter();
+
     const [content, setContent] = useState({
         gst: "",
         rpayapi: "",
@@ -55,7 +61,9 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
             className="default"
             title="Submit"
             {...btnStyle}
-            // onClick={handleRegister}
+            onClick={ 
+                ()=>router.push("/home/subscription")
+            }
             disabled={
                 content.gst === "" ||
                 content.rpayapi === "" ||
@@ -78,7 +86,7 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
                             <Box style={{ display: 'flex' }}>
                                 <Box
                                     className="col imageCol"
-                                    style={{ width: "50%" ,flex:1}}
+                                    style={{ width: "50%", flex: 1 }}
                                     {...col}
 
                                 >
@@ -88,14 +96,14 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
                                         alt="Login Banner"
                                     />
                                 </Box>
-                                <Box className="col tabCol" {...col} style={{flex:1}}>
-                                    <Box {...contentWrapper} style={{ paddingLeft: '30px',padding:'40px' }}>
+                                <Box className="col tabCol" {...col} style={{ flex: 1 }}>
+                                    <Box {...contentWrapper} style={{ paddingLeft: '30px', padding: '40px' }}>
                                         <h1 style={{ paddingBottom: "10px" }}>Extra details</h1>
 
                                         <div style={{ position: "relative" }}>
                                             <Input
 
-                                            
+
                                                 isMaterial
                                                 label="GST No"
                                                 onChange={(e) => {
@@ -116,7 +124,7 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
                                                     style={{
                                                         color: "red",
                                                         position: "absolute",
-                                                        
+
 
                                                         top: "40px",
                                                     }}
@@ -287,6 +295,7 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
                                                     style={{
                                                         color: "red",
                                                         position: "absolute",
+
                                                         top: "72px",
                                                     }}
                                                 >
@@ -374,7 +383,7 @@ function ExtraDetails(row, col, btnStyle, contentWrapper) {
                                                 if (!keyValid || e === "") {
                                                     setkeyError("Invaild GSTIN")
                                                 } else {
-                                    
+
                                                     setkeyError(null)
                                                 }
                                                 setContent({ ...content, rpaykey: e });
