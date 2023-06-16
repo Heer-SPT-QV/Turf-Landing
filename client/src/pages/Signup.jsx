@@ -31,15 +31,20 @@ const Signup = () => {
     setToken,
   } = useContext(Context);
 
-  const nameRef = useRef(null);
+  const fnameRef = useRef(null);
+  const lnameRef = useRef(null);
   const emailRef = useRef(null);
   const phoneRef = useRef(null);
   const passwordRef = useRef(null);
   const repeatPasswordRef = useRef(null);
 
   const handleOnSignUpBtnClicked = () => {
-    if (!nameRef.current.value.trim().length) {
-      toast.error("Name Cannot be empty");
+    if (!fnameRef.current.value.trim().length) {
+      toast.error("First Name Cannot be empty");
+      return;
+    }
+    if (!lnameRef.current.value.trim().length) {
+      toast.error("Last Name Cannot be empty");
       return;
     }
     if (!emailRef.current.value.trim().length) {
@@ -77,7 +82,8 @@ const Signup = () => {
     }
 
     const values = {
-      name: nameRef.current.value,
+      firstname: fnameRef.current.value,
+      lastname: lnameRef.current.value,
       emailId: emailRef.current.value,
       phoneNumber: phoneRef.current.value,
       password: passwordRef.current.value,
@@ -142,7 +148,17 @@ const Signup = () => {
             <input
               className={classnames("input", styles.LoginInputs)}
               type="text"
-              placeholder="Full Name"
+              placeholder="First Name"
+              required
+              ref={nameRef}
+            />
+          </div>
+
+          <div className="control">
+            <input
+              className={classnames("input", styles.LoginInputs)}
+              type="text"
+              placeholder="Last Name"
               required
               ref={nameRef}
             />
@@ -243,13 +259,13 @@ const Signup = () => {
 
   return (
     <>
-      <div className={classnames(styles.addRelationalBackground)}></div>
+      <div className={classnames(styles.addRelationalBackground)} ></div>
       <div className={classnames("section", styles.LoginWrapper)}>
         <div
           className={classnames("container is-fluid", styles.overRideContainer)}
         >
-          <div className={classnames(" columns mt-5", styles.LoginColumns)}>
-            <div className={classnames("column box", styles.LoginLeftWrapper)}>
+          <div style={{justifyContent:'center',margin:'auto',display:'flex',maxWidth:'35%',flexDirection:'column'}}>
+            <div className={classnames(styles.LoginLeftWrapper) } >
               <SignUpSideComponent />
             </div>
             <div

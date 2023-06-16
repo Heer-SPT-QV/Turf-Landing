@@ -23,51 +23,61 @@ const Login = () => {
   const { isLoggedIn, setIsLoggedIn, setUserData, cartId, setToken } =
     useContext(Context);
   const phoneRef = useRef(null);
-  const passwordRef = useRef(null);
+  const otpRef = useRef(null);
 
   const handleSignInBtnClicked = () => {
     if (!phoneRef.current.value.trim().length) {
       toast.error("Phone Number Cannot be empty");
       return;
     }
-    if (!passwordRef.current.value.trim().length) {
-      toast.error("Password Cannot be empty");
+
+    if(!/^(0|91)?[6-9][0-9]{9}$/.test(phoneRef.current.value.trim())){
+      toast.error('Phone Number is wrong');
+      return;
+    }
+    if (!otpRef.current.value.trim().length) {
+      toast.error("OTP Cannot be empty");
       return;
     }
 
     const values = {
-      username: phoneRef.current.value,
-      password: passwordRef.current.value,
+      number: phoneRef.current.value,
+      otp: otpRef.current.value,
       cartId: cartId,
     };
 
-    axios
-      .post(api + "user/login", values, headerWithoutToken)
-      .then(async (res) => {
-        if (res.data.code === 200) {
-          console.log(res.data);
-          localStorage.setItem("token", res.data.body.token);
-          localStorage.setItem(
-            "turfUserDetails",
-            JSON.stringify(res.data.body.user)
-          );
-          if (localStorage.getItem("turfCart") !== null) {
-            localStorage.removeItem("turfCart");
-          }
-          setToken(res.data.body.token);
-          setUserData(res.data?.body?.user);
-          setIsLoggedIn(true);
           history.push(state?.from || "/");
-        }
-        if (res.data.code === 404) {
-          toast.error(res.data.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err?.response?.data?.message);
-        toast.error(err.message);
-      });
+          setIsLoggedIn(true);
+
+
+
+  //   axios
+  //     .post(api + "user/login", values, headerWithoutToken)
+  //     .then(async (res) => {
+  //       if (res.data.code === 200) {
+  //         console.log(res.data);
+  //         localStorage.setItem("token", res.data.body.token);
+  //         localStorage.setItem(
+  //           "turfUserDetails",
+  //           JSON.stringify(res.data.body.user)
+  //         );
+  //         if (localStorage.getItem("turfCart") !== null) {
+  //           localStorage.removeItem("turfCart");
+  //         }
+  //         setToken(res.data.body.token);
+  //         setUserData(res.data?.body?.user);
+  //         setIsLoggedIn(true);
+  //         history.push(state?.from || "/");
+  //       }
+  //       if (res.data.code === 404) {
+  //         toast.error(res.data.message);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       toast.error(err?.response?.data?.message);
+  //       toast.error(err.message);
+  //     });
   };
 
   const LoginSideComponent = () => {
@@ -101,7 +111,7 @@ const Login = () => {
             <div className="control">
               <input
                 className={classnames("input", styles.LoginInputs)}
-                type="text"
+                type="tel"
                 placeholder="Phone Number"
                 required
                 ref={phoneRef}
@@ -111,10 +121,10 @@ const Login = () => {
             <div className="control">
               <input
                 className={classnames("input mt-3", styles.LoginInputs)}
-                type="password"
-                placeholder="Password"
+                type="number"
+                placeholder="OTP"
                 required
-                ref={passwordRef}
+                ref={otpRef}
               />
             </div>
 
@@ -184,8 +194,8 @@ const Login = () => {
         <div
           className={classnames("container is-fluid", styles.overRideContainer)}
         >
-          <div className={classnames(" columns", styles.LoginColumns)}>
-            <div className={classnames("column box", styles.LoginLeftWrapper)}>
+          <div style={{justifyContent:'center',margin:'auto',display:'flex',maxWidth:'35%',flexDirection:'column'}}>
+            <div className={classnames(styles.LoginLeftWrapper)}>
               <LoginSideComponent />
             </div>
             <div
