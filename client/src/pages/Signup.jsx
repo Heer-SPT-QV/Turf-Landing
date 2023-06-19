@@ -27,96 +27,85 @@ const Signup = () => {
     isLoggedIn,
     setIsLoggedIn,
     setUserData,
-    cartId,
+    // cartId,
     setToken,
   } = useContext(Context);
 
   const fnameRef = useRef(null);
   const lnameRef = useRef(null);
+  const unameRef = useRef(null);
   const emailRef = useRef(null);
   const phoneRef = useRef(null);
-  const passwordRef = useRef(null);
-  const repeatPasswordRef = useRef(null);
+
 
   const handleOnSignUpBtnClicked = () => {
-    if (!fnameRef.current.value.trim().length) {
+    if (!fnameRef.current?.value.trim().length) {
       toast.error("First Name Cannot be empty");
       return;
     }
-    if (!lnameRef.current.value.trim().length) {
+    if (!lnameRef.current?.value.trim().length) {
       toast.error("Last Name Cannot be empty");
       return;
     }
-    if (!emailRef.current.value.trim().length) {
+
+    if (!unameRef.current?.value.trim().length) {
+      toast.error("User Name Cannot be empty");
+      return;
+    }
+    if (!emailRef.current?.value.trim().length) {
       toast.error("Email Cannot be empty");
       return;
     }
-    if (!EmailRegex.test(String(emailRef.current.value).toLowerCase())) {
+    if (!EmailRegex.test(String(emailRef.current?.value).toLowerCase())) {
       toast.error("Email is not valid");
       return;
     }
-    if (!phoneRef.current.value.trim().length) {
+    if (!phoneRef.current?.value.trim().length) {
       toast.error("Phone Number Cannot be empty");
       return;
     }
-    if (!passwordRef.current.value.trim().length) {
-      toast.error("Password Cannot be empty");
-      return;
-    }
-    if (!passwordRef.current.value.trim().length > 6) {
-      toast.error("Password should have more than 6 characters");
-      return;
-    }
-    if (!repeatPasswordRef.current.value.trim().length) {
-      toast.error("Repeat Password Cannot be empty");
-      return;
-    }
-    if (
-      passwordRef.current.value.trim() !==
-      repeatPasswordRef.current.value.trim()
-    ) {
-      toast.error("Password did not match");
-      passwordRef.current.value = "";
-      repeatPasswordRef.current.value = "";
+    if (!/^(0|91)?[6-9][0-9]{9}$/.test(phoneRef.current?.value.trim())) {
+      toast.error('Phone Number is wrong');
       return;
     }
 
+
     const values = {
-      firstname: fnameRef.current.value,
-      lastname: lnameRef.current.value,
-      emailId: emailRef.current.value,
-      phoneNumber: phoneRef.current.value,
-      password: passwordRef.current.value,
-      role: "USER",
-      cartId: cartId,
+      businessId:2,
+      firstname: fnameRef.current?.value,
+      lastname: lnameRef.current?.value,
+      username: unameRef.current?.value,
+      email: emailRef.current?.value,
+      phonenumber: Number(phoneRef.current?.value),
+      // role: "USER",
+      // cartId: cartId,
     };
 
     axios
-      .post(api + "user/sign-up", values, headerWithoutToken)
+      .post(api + "User", values, headerWithoutToken)
       .then(async (res) => {
-        if (res.data.code === 200) {
-          await localStorage.setItem("token", res.data.body.token);
-          await localStorage.setItem(
-            "turfUserDetails",
-            JSON.stringify(res.data.body.user)
-          );
+        console.log(res)
+        console.log(res.data)
+        console.log(res.status)
+        if (res.status === 200) {
+          // await localStorage.setItem("token", res.data.body.token);  
+          await localStorage.setItem("turfUserDetails",JSON.stringify(res.config.data));
           if (localStorage.getItem("turfCart") !== null) {
             localStorage.removeItem("turfCart");
           }
-          setToken(res.data.body.token);
+          // setToken(res.data.body.token);
           setUserData(res.data?.body?.user);
-          setIsLoggedIn(true);
-          axios.post(TurfMail + "welcome", {
-            name: res.data?.body?.user?.name || "",
-            email: res.data?.body?.user?.emailId || "",
-          });
+          // setIsLoggedIn(true);
           history.push(state?.from || "/");
+        
+        }else{
+          console.warn('hello')
         }
       })
       .catch((err) => {
         console.log(err);
         toast.error(err?.response?.data?.message);
-        toast.error(err.message);
+        toast.error("here's error:",err.message);
       });
   };
 
@@ -150,7 +139,7 @@ const Signup = () => {
               type="text"
               placeholder="First Name"
               required
-              ref={nameRef}
+              ref={fnameRef}
             />
           </div>
 
@@ -160,7 +149,17 @@ const Signup = () => {
               type="text"
               placeholder="Last Name"
               required
-              ref={nameRef}
+              ref={lnameRef}
+            />
+          </div>
+
+          <div className="control">
+            <input
+              className={classnames("input", styles.LoginInputs)}
+              type="text"
+              placeholder="User Name"
+              required
+              ref={unameRef}
             />
           </div>
 
@@ -181,26 +180,6 @@ const Signup = () => {
               placeholder="Phone Number"
               required
               ref={phoneRef}
-            />
-          </div>
-
-          <div className="control">
-            <input
-              className={classnames("input mt-3", styles.LoginInputs)}
-              type="password"
-              placeholder="Password"
-              required
-              ref={passwordRef}
-            />
-          </div>
-
-          <div className="control">
-            <input
-              className={classnames("input mt-3", styles.LoginInputs)}
-              type="password"
-              placeholder="Repeat Password"
-              required
-              ref={repeatPasswordRef}
             />
           </div>
         </div>
@@ -264,8 +243,8 @@ const Signup = () => {
         <div
           className={classnames("container is-fluid", styles.overRideContainer)}
         >
-          <div style={{justifyContent:'center',margin:'auto',display:'flex',maxWidth:'35%',flexDirection:'column'}}>
-            <div className={classnames(styles.LoginLeftWrapper) } >
+          <div style={{ justifyContent: 'center', margin: 'auto', display: 'flex', maxWidth: '35%', flexDirection: 'column' }}>
+            <div className={classnames(styles.LoginLeftWrapper)} >
               <SignUpSideComponent />
             </div>
             <div

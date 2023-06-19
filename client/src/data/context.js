@@ -22,9 +22,9 @@ export const ContextProvider = ({ children }) => {
   const [totalSlots, setTotalSlots] = useState(0);
   const [isCartEmpty, setIsCartEmpty] = useState(false);
   const [userData, setUserData] = useState(
-    JSON.parse(localStorage.getItem("turfUserDetails")) || null
+    JSON.parse(localStorage.getItem("turfUserDetails")) || null || undefined
   );
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(localStorage.getItem("token") || null || undefined);
 
   return (
     <Context.Provider
