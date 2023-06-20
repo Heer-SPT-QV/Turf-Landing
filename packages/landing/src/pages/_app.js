@@ -22,10 +22,8 @@ export default function CustomApp({ Component, pageProps }) {
   const [s,setS] = useState(0);
 
   useEffect(()=>{
-    console.log(pathname);
     if(pathname !== '/'){
         setS(1);
-        console.log('lililil')
     } else{
       setS(0);
     }

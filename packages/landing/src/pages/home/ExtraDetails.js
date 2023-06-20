@@ -36,17 +36,19 @@ import { Router } from "react-router-dom";
 // import { Box } from "@mui/material";
 
 function ExtraDetails(row, col, btnStyle, contentWrapper) {
-const router = useRouter();
-
+    const router = useRouter();
     const [content, setContent] = useState({
-        gst: "",
-        rpayapi: "",
-        rpaykey: "",
+        gstNo: "",
+        razorpayApi: "",
+        razorpaySecretKey: "",
         address: "",
         city: "",
         state: "",
-        pincode: "",
+        postcode: 0,
+        logitude: 21.15435030286432,
+        latitude: 72.78280145231851
     });
+
 
     const [gstError, setgstError] = useState(null);
     const [apiError, setapiError] = useState(null);
@@ -56,25 +58,86 @@ const router = useRouter();
     const [stateError, setstateError] = useState(null);
     const [pincodeError, setpincodeError] = useState(null);
 
+    // Retrieving the token from local storage
+    // const token = window.localStorage.getItem("user-info");
+
+    if (typeof window !== 'undefined') {
+        var token = localStorage.getItem('user-info')
+    }
+
+    //    console.log('extra details token', token)
+
+    const result = async () => {
+        const convertedPin = {
+            ...content,
+            postcode: Number(content.postcode),
+        };
+        console.log(convertedPin)
+        try{
+
+            var send = await fetch('http://192.168.1.19/api/Business/AddExtraDetails', {
+                body: JSON.stringify(convertedPin),
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                // body: JSON.stringify(content)
+            })
+            
+        }catch(error){
+            console.warn('erree',error)
+        }
+        try {
+            var responseBody = await send.text();
+
+            // Check if the response body is valid JSON
+            if (responseBody.startsWith("{") || responseBody.startsWith("[")) {
+                var response = JSON.parse(responseBody);
+                // Handle the parsed JSON response as needed
+            } else {
+                // Handle the response body directly if it's not valid JSON
+                console.log("Response body:", responseBody);
+            }
+        } catch (error) {
+            console.warn("Error reading response:", error);
+        }
+        console.log('send',send)
+        if (send && send.ok) {
+            if(responseBody==='already data'){
+                console.warn(responseBody)
+            }else{
+
+                try {
+                    console.log('add sucessfully')
+                    router.push("/home/subscription");
+                } catch (error) {
+                    console.warn('extra details ', error)
+                    
+                }
+            }
+        }
+    }
+
     const SubmitButtonGrp = () => (
         <Button
             className="default"
             title="Submit"
             {...btnStyle}
-            onClick={ 
-                ()=>router.push("/home/subscription")
-            }
+            onClick={result}
             disabled={
-                content.gst === "" ||
-                content.rpayapi === "" ||
-                content.rpaykey === "" ||
+                content.gstNo === "" ||
+                content.razorpayApi === "" ||
+                content.razorpaySecretKey === "" ||
                 content.address === "" ||
                 content.city === "" ||
                 content.state === "" ||
-                content.pincode === ""
+                content.postcode === ""
             }
         />
     );
+
     return (
         <ThemeProvider theme={theme}>
             <ResetCSS />
@@ -115,7 +178,7 @@ const router = useRouter();
                                                         setgstError("Invaild GSTIN");
                                                     } else {
                                                         setgstError(null);
-                                                        setContent({ ...content, gst: e });
+                                                        setContent({ ...content, gstNo: e });
                                                     }
                                                 }}
                                             />
@@ -148,7 +211,7 @@ const router = useRouter();
                                                     } else {
                                                         setapiError(null);
                                                     }
-                                                    setContent({ ...content, rpayapi: e });
+                                                    setContent({ ...content, razorpayApi: e });
                                                 }}
                                             />
                                             {apiError && (
@@ -178,7 +241,7 @@ const router = useRouter();
                                                     } else {
                                                         setkeyError(null);
                                                     }
-                                                    setContent({ ...content, rpaykey: e });
+                                                    setContent({ ...content, razorpaySecretKey: e });
                                                 }}
                                             />
                                             {keyError && (
@@ -286,7 +349,7 @@ const router = useRouter();
                                                         setpincodeError("Enter valid pincode");
                                                     } else {
                                                         setpincodeError(null);
-                                                        setContent({ ...content, pincode: e });
+                                                        setContent({ ...content, postcode: e });
                                                     }
                                                 }}
                                             />
@@ -318,163 +381,163 @@ const router = useRouter();
         </ThemeProvider>
     );
 
-    return (
-        <ThemeProvider theme={theme}>
-            <ResetCSS />
-            <GlobalStyle />
-            <AppWrapper>
-                <ContentWrapper>
-                    <LoginModalWrapper>
-                        <Box className="row" style={{ display: 'flex' }}>
-                            <Box className="col imageCol" style={{ width: '70%', flex: 1 }}  >
-                                <Image
-                                    className="patternImage"
-                                    src={LoginImage?.src}
-                                    alt="Login Banner" />
-                            </Box>
-                            <Box className="col tabCol" {...col} style={{ border: '2px solid red', flex: 1 }}>
-                                <Box {...contentWrapper} style={{ width: '400px', padding: '30px' }}>
+    // return (
+    //     <ThemeProvider theme={theme}>
+    //         <ResetCSS />
+    //         <GlobalStyle />
+    //         <AppWrapper>
+    //             <ContentWrapper>
+    //                 <LoginModalWrapper>
+    //                     <Box className="row" style={{ display: 'flex' }}>
+    //                         <Box className="col imageCol" style={{ width: '70%', flex: 1 }}  >
+    //                             <Image
+    //                                 className="patternImage"
+    //                                 src={LoginImage?.src}
+    //                                 alt="Login Banner" />
+    //                         </Box>
+    //                         <Box className="col tabCol" {...col} style={{ border: '2px solid red', flex: 1 }}>
+    //                             <Box {...contentWrapper} style={{ width: '400px', padding: '30px' }}>
 
-                                    <h1 style={{ paddingBottom: '10px' }}>Extra details</h1>
+    //                                 <h1 style={{ paddingBottom: '10px' }}>Extra details</h1>
 
-                                    <div style={{ position: 'relative' }}>
-                                        <Input
-                                            isMaterial
-                                            label="GST No"
-                                            onChange={(e) => {
-                                                const gst = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(e)
-                                                if (!gst || e === "") {
-                                                    setgstError("Invaild GSTIN")
-                                                } else {
-                                                    setgstError(null)
-                                                    setContent({ ...content, gst: e });
-                                                }
+    //                                 <div style={{ position: 'relative' }}>
+    //                                     <Input
+    //                                         isMaterial
+    //                                         label="GST No"
+    //                                         onChange={(e) => {
+    //                                             const gst = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(e)
+    //                                             if (!gst || e === "") {
+    //                                                 setgstError("Invaild GSTIN")
+    //                                             } else {
+    //                                                 setgstError(null)
+    //                                                 setContent({ ...content, gst: e });
+    //                                             }
 
-                                            }}
-                                        />
-                                        {gstError && <span style={{ color: 'red', position: 'absolute', top: '40px' }}>{gstError}</span>}
-                                        {gstError && <div style={{ height: '25px' }} />}</div>
+    //                                         }}
+    //                                     />
+    //                                     {gstError && <span style={{ color: 'red', position: 'absolute', top: '40px' }}>{gstError}</span>}
+    //                                     {gstError && <div style={{ height: '25px' }} />}</div>
 
-                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
-                                        <Input
-                                            isMaterial
-                                            label="RazerPay API"
-                                            onChange={(e) => {
-                                                const apiValid = /^rzp_test_[0-9a-zA-Z]{30}$|^rzp_live_[0-9a-zA-Z]{30}$/
+    //                                 <div style={{ position: 'relative', paddingTop: '30px' }}>
+    //                                     <Input
+    //                                         isMaterial
+    //                                         label="RazerPay API"
+    //                                         onChange={(e) => {
+    //                                             const apiValid = /^rzp_test_[0-9a-zA-Z]{30}$|^rzp_live_[0-9a-zA-Z]{30}$/
 
-                                                if (!apiValid || e === "") {
-                                                    setapiError("Invaild API")
-                                                } else {
-                                                    setapiError(null)
-                                                }
-                                                setContent({ ...content, rpayapi: e });
-                                            }}
-                                        />
-                                        {apiError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{apiError}</span>}
-                                        {apiError && <div style={{ height: '25px' }} />}</div>
+    //                                             if (!apiValid || e === "") {
+    //                                                 setapiError("Invaild API")
+    //                                             } else {
+    //                                                 setapiError(null)
+    //                                             }
+    //                                             setContent({ ...content, rpayapi: e });
+    //                                         }}
+    //                                     />
+    //                                     {apiError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{apiError}</span>}
+    //                                     {apiError && <div style={{ height: '25px' }} />}</div>
 
-                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
-                                        <Input
-                                            isMaterial
-                                            label="RazerPay key"
-                                            onChange={(e) => {
-                                                const keyValid = /^rzp_test_[0-9a-zA-Z]{30}$|^rzp_live_[0-9a-zA-Z]{30}$/
+    //                                 <div style={{ position: 'relative', paddingTop: '30px' }}>
+    //                                     <Input
+    //                                         isMaterial
+    //                                         label="RazerPay key"
+    //                                         onChange={(e) => {
+    //                                             const keyValid = /^rzp_test_[0-9a-zA-Z]{30}$|^rzp_live_[0-9a-zA-Z]{30}$/
 
-                                                if (!keyValid || e === "") {
-                                                    setkeyError("Invaild GSTIN")
-                                                } else {
+    //                                             if (!keyValid || e === "") {
+    //                                                 setkeyError("Invaild GSTIN")
+    //                                             } else {
 
-                                                    setkeyError(null)
-                                                }
-                                                setContent({ ...content, rpaykey: e });
-                                            }}
-                                        />
-                                        {keyError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{keyError}</span>}
-                                        {keyError && <div style={{ height: '25px' }} />}</div>
+    //                                                 setkeyError(null)
+    //                                             }
+    //                                             setContent({ ...content, rpaykey: e });
+    //                                         }}
+    //                                     />
+    //                                     {keyError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{keyError}</span>}
+    //                                     {keyError && <div style={{ height: '25px' }} />}</div>
 
-                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
-                                        <Input
-                                            isMaterial
-                                            label="Address"
-                                            onChange={(e) => {
-                                                if (e === "") {
-                                                    setAddressError('Enter Address')
-                                                } else {
-                                                    setAddressError(null)
-                                                    setContent({ ...content, address: e });
-                                                }
-                                            }}
-                                        />
-                                        {addressError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{addressError}</span>}
-                                        {addressError && <div style={{ height: '25px' }} />}
+    //                                 <div style={{ position: 'relative', paddingTop: '30px' }}>
+    //                                     <Input
+    //                                         isMaterial
+    //                                         label="Address"
+    //                                         onChange={(e) => {
+    //                                             if (e === "") {
+    //                                                 setAddressError('Enter Address')
+    //                                             } else {
+    //                                                 setAddressError(null)
+    //                                                 setContent({ ...content, address: e });
+    //                                             }
+    //                                         }}
+    //                                     />
+    //                                     {addressError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{addressError}</span>}
+    //                                     {addressError && <div style={{ height: '25px' }} />}
 
-                                    </div>
+    //                                 </div>
 
-                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
-                                        <Input
-                                            isMaterial
-                                            label="City"
-                                            onChange={(e) => {
-                                                if (e === "") {
-                                                    setCityError('Enter City')
-                                                } else {
-                                                    setCityError(null)
-                                                    setContent({ ...content, city: e });
-                                                }
-                                            }}
-                                        />
-                                        {cityError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{cityError}</span>}
-                                        {cityError && <div style={{ height: '25px' }} />}</div>
+    //                                 <div style={{ position: 'relative', paddingTop: '30px' }}>
+    //                                     <Input
+    //                                         isMaterial
+    //                                         label="City"
+    //                                         onChange={(e) => {
+    //                                             if (e === "") {
+    //                                                 setCityError('Enter City')
+    //                                             } else {
+    //                                                 setCityError(null)
+    //                                                 setContent({ ...content, city: e });
+    //                                             }
+    //                                         }}
+    //                                     />
+    //                                     {cityError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{cityError}</span>}
+    //                                     {cityError && <div style={{ height: '25px' }} />}</div>
 
-                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
+    //                                 <div style={{ position: 'relative', paddingTop: '30px' }}>
 
-                                        <Input
-                                            isMaterial
-                                            label="State"
-                                            onChange={(e) => {
-                                                if (e === "") {
-                                                    setstateError('Enter state')
-                                                } else {
-                                                    setstateError(null)
-                                                    setContent({ ...content, state: e });
-                                                }
-                                            }}
-                                        />
-                                        {stateError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{stateError}</span>}
-                                        {stateError && <div style={{ height: '25px' }} />}</div>
-
-
-                                    <div style={{ position: 'relative', paddingTop: '30px' }}>
-                                        <Input
-                                            isMaterial
-                                            label="Pincode"
-                                            onChange={(e) => {
-                                                const pin = /^\d{6}$/.test(e)
-                                                if (!pin) {
-                                                    setpincodeError('Enter valid pincode')
-                                                } else {
-                                                    setpincodeError(null)
-                                                    setContent({ ...content, pincode: e });
-                                                }
-                                            }}
-                                        />
-                                        {pincodeError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{pincodeError}</span>}
-                                        {pincodeError && <div style={{ height: '10px' }} />}</div>
+    //                                     <Input
+    //                                         isMaterial
+    //                                         label="State"
+    //                                         onChange={(e) => {
+    //                                             if (e === "") {
+    //                                                 setstateError('Enter state')
+    //                                             } else {
+    //                                                 setstateError(null)
+    //                                                 setContent({ ...content, state: e });
+    //                                             }
+    //                                         }}
+    //                                     />
+    //                                     {stateError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{stateError}</span>}
+    //                                     {stateError && <div style={{ height: '25px' }} />}</div>
 
 
-                                    <Box paddingTop='30px'>
-                                        <SubmitButtonGrp />
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
+    //                                 <div style={{ position: 'relative', paddingTop: '30px' }}>
+    //                                     <Input
+    //                                         isMaterial
+    //                                         label="Pincode"
+    //                                         onChange={(e) => {
+    //                                             const pin = /^\d{6}$/.test(e)
+    //                                             if (!pin) {
+    //                                                 setpincodeError('Enter valid pincode')
+    //                                             } else {
+    //                                                 setpincodeError(null)
+    //                                                 setContent({ ...content, pincode: e });
+    //                                             }
+    //                                         }}
+    //                                     />
+    //                                     {pincodeError && <span style={{ color: 'red', position: 'absolute', top: '72px' }}>{pincodeError}</span>}
+    //                                     {pincodeError && <div style={{ height: '10px' }} />}</div>
 
-                    </LoginModalWrapper>
-                </ContentWrapper>
 
-            </AppWrapper>
-        </ThemeProvider>
-    )
+    //                                 <Box paddingTop='30px'>
+    //                                     <SubmitButtonGrp />
+    //                                 </Box>
+    //                             </Box>
+    //                         </Box>
+    //                     </Box>
+
+    //                 </LoginModalWrapper>
+    //             </ContentWrapper>
+
+    //         </AppWrapper>
+    //     </ThemeProvider>
+    // )
 }
 
 // ExtraDetails style props

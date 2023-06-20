@@ -57,6 +57,9 @@ const LoginModal = ({
   const [active, setActive] = useState(false);
   const [number, setNumber] = useState("");
   const [status, setStatus] = useState("ph");
+  const [userCreate, setUserCreate] = useState(false)
+  const [notUser, setNotUser] = useState(false)
+  const [alreadyUser, setAlreadyUser] = useState(false)
   const [otp, setOtp] = useState("");
   const router = useRouter();
   const [error, setError] = useState("");
@@ -65,14 +68,23 @@ const LoginModal = ({
   const [berror, setBError] = useState("");
   const [mailError, setMailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [otpError, setotpError] = useState("");
   const [loading, setLoading] = useState(false);
   const [otpS, setOtpS] = useState();
   const [otpF, setOtpF] = useState();
   const [timer, setTimer] = useState(10);
+  const [condition, setCondition] = useState(false);
+
+  useEffect(()=>{
+    var token_check=localStorage.getItem('user-info');
+    if(token_check){
+      router.push('/home/ExtraDetails')
+
+    }
+  },[])
 
   async function logIn() {
     const num = Number(number)
-    console.log(num)
 
     const result = await fetch(`http://192.168.1.19/api/Business/Login?PhoneNumber=${num}`,
       {
@@ -84,18 +96,26 @@ const LoginModal = ({
         // body: JSON.stringify(item)
       });
     try {
-      var response = await result.json();
+      var responseBody = await result.text();
+
+      // Check if the response body is valid JSON
+      if (responseBody.startsWith("{") || responseBody.startsWith("[")) {
+        var response = JSON.parse(responseBody);
+        // Handle the parsed JSON response as needed
+      } else {
+        // Handle the response body directly if it's not valid JSON
+        console.log("Response body:", responseBody);
+      }
     } catch (error) {
-      console.log("Error parsing JSON:", error)
+      console.log("Error reading response:", error);
     }
 
     if (result.ok) {
-      try {
-        localStorage.setItem("user-info", JSON.stringify(response));
-      } catch (error) {
-        console.error("Error storing data in local storage:", error);
-      }
-      // localStorage.setItem("user-info", JSON.stringify(response));
+      //   try {
+      //     localStorage.setItem("user-info", JSON.stringify(response));
+      //   } catch (error) {
+      //     console.error("Error storing data in local storage:", error);
+      //   }
 
       if (status === "ph") {
         setLoading(true);
@@ -105,35 +125,55 @@ const LoginModal = ({
           setLoading(false);
           caller();
         }, 2000);
-      } else {
-        const var_otp= Number(otp)
-        const varify = await fetch(`http://192.168.1.19/api/Business/VerifyLogin?PhoneNumber=${num}&Otp=${var_otp}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'accept': '*/*',
-          }
-        })
-        try {
-          const response = await varify.json();
-        } catch (error) {
-          console.log("Error parsing JSON:", error)
-        }
-
-        if(varify.ok){
-          try{
-            router.push("/home/ExtraDetails");
-            setOpen(false);
-            closeModal();
-          }catch(error){
-            console.warn(`varification error`,error)
-          }
-        }
       }
     } else {
       // Handle error here
       console.error("Phone number not sent successfully");
       setOtpF(true);
+    }
+  }
+  var varify_otp = async () => {
+    const num = Number(number)
+    const var_otp = Number(otp)
+    const varify = await fetch(`http://192.168.1.19/api/Business/VerifyLogin?PhoneNumber=${num}&Otp=${var_otp}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': '*/*',
+      }
+    })
+    try {
+      var responseBodyOtp = await varify.text();
+
+      // Check if the response body is valid JSON
+      if (responseBodyOtp.startsWith("{") || responseBodyOtp.startsWith("[")) {
+        var responseOtp = JSON.parse(responseBodyOtp);
+        // Handle the parsed JSON response as needed
+      } else {
+        // Handle the response body directly if it's not valid JSON
+        console.log("Response body:", responseBodyOtp);
+      }
+    } catch (error) {
+      console.log("Error reading response:", error);
+    }
+
+    if (varify.ok) {
+      if (responseBodyOtp !== 'Wrong Otp') {
+        try {
+          router.push("/home/ExtraDetails");
+          setOpen(false);
+          closeModal();
+          try {
+            localStorage.setItem("user-info", JSON.stringify(responseBodyOtp));
+          } catch (error) {
+            console.error("Error storing data in local storage:", error);
+          }
+        } catch (error) {
+          console.warn(`varification error`, error)
+        }
+      } else {
+        setotpError('Wrong OTP')
+      }
     }
   }
   async function handleRegister() {
@@ -147,7 +187,7 @@ const LoginModal = ({
       phoneNumber: Number(content.phoneNumber)
     };
     try {
-      await fetch('http://192.168.1.19/api/Business/SignUp', {
+      const response = await fetch('http://192.168.1.19/api/Business/SignUp', {
         method: 'POST',
         body: JSON.stringify(convertedData),
         headers: {
@@ -164,16 +204,24 @@ const LoginModal = ({
       // console.log(result)
       if (response.ok) {
         // Request successful
-        const result = await response.json();
-        console.log(result);
-        setDefaultTab("loginForm");
-        setActive(true);
-        setNumber(content.phoneNumber);
 
+        const result = await response.json();
+        if (result === 'User Create Successfully') {
+          console.log('result', result);
+          setUserCreate(true)
+          setDefaultTab("loginForm");
+          setActive(true);
+          setNumber(content.phoneNumber);
+        } else if (result === "User Alredy Register") {
+          setAlreadyUser(true)
+        } else {
+          console.log('error')
+        }
 
       } else {
         // Request failed
         console.error('Error:', response.status);
+        setNotUser(true)
       }
     } catch (error) {
       console.log('Error:', error)
@@ -184,9 +232,11 @@ const LoginModal = ({
     if (reason === "clickaway") {
       return;
     }
-
     setOtpS(false);
     setOtpF(false);
+    setUserCreate(false);
+    setNotUser(false);
+    setAlreadyUser(false)
   };
 
 
@@ -198,7 +248,7 @@ const LoginModal = ({
         title={status === "ph" ? "REQUEST OTP" : "LOGIN"}
         {...btnStyle}
         disabled={number === "" || error !== "" || (status !== "ph" && otp === "")}
-        onClick={logIn}
+        onClick={status === 'ph' ? logIn : varify_otp}
 
       />
       {/* <Button
@@ -220,7 +270,7 @@ const LoginModal = ({
           content.lastName === "" ||
           content.businessName === "" ||
           content.email === "" ||
-          content.phoneNumber == "0" ||
+          content.phoneNumber == "" ||
           ferror !== null ||
           lerror !== null ||
           berror !== null ||
@@ -270,6 +320,7 @@ const LoginModal = ({
                   <Input
                     isMaterial
                     label="Phone number"
+                    autocomplete="off"
                     value={number}
                     onChange={(e) => {
                       const x = /^(0|91)?[6-9][0-9]{9}$/.test(e);
@@ -290,13 +341,19 @@ const LoginModal = ({
                 {status !== "ph" && (
                   <>
                     {" "}
-                    <Input
-                      isMaterial
-                      label="OTP"
-                      onChange={(e) => {
-                        setOtp(e);
-                      }}
-                    />
+
+                    <div style={{ position: 'relative' }}>
+                      <Input
+                        isMaterial
+                        label="OTP"
+                        autocomplete="off"
+                        onChange={(e) => {
+                          setOtp(e);
+                        }}
+                      />
+                      {otpError && <span style={{ color: 'red', position: 'absolute', top: '44px' }}>{otpError}</span>}
+                      {otpError && <div style={{ height: '14px' }}></div>}
+                    </div>
                     {timer !== 0 && (
                       <Typography
                         style={{ textAlign: "right", fontSize: "10px" }}
@@ -322,7 +379,7 @@ const LoginModal = ({
                         style={{
                           textAlign: "right",
                           fontSize: "10px",
-                          color: "blue",
+                          color: "blue",  
 
                         }}
                       >
@@ -347,6 +404,7 @@ const LoginModal = ({
                   <Input
                     isMaterial
                     value={content.firstName}
+                    autocomplete="off"
                     label="First name"
                     onChange={(e) => {
                       const nameRegex = /^[A-Z][a-z]*$/.test(e);
@@ -367,6 +425,7 @@ const LoginModal = ({
                     isMaterial
                     label="Last name"
                     //   value={content.lastName}
+                    autocomplete="off"
                     onChange={(e) => {
                       const nameRegex = /^[A-Z][a-z]*$/.test(e);
                       if (!nameRegex) {
@@ -387,6 +446,7 @@ const LoginModal = ({
                     isMaterial
                     label="Business name"
                     //   value={content.businessName}
+                    autocomplete="off"
                     onChange={(e) => {
                       const nameRegex = /^[A-Z][a-z]*$/.test(e);
                       if (!nameRegex) {
@@ -408,6 +468,7 @@ const LoginModal = ({
                   <Input
                     inputType="email"
                     isMaterial
+                    autocomplete="off"
                     label="Email Address"
                     //   value={content.email}
                     onChange={(e) => {
@@ -432,6 +493,7 @@ const LoginModal = ({
                   <Input
                     isMaterial
                     label="Phone number"
+                    autocomplete="off"
                     onChange={(e) => {
                       const num = /^(0|91)?[6-9][0-9]{9}$/.test(e)
 
@@ -452,7 +514,7 @@ const LoginModal = ({
                 </div>
               </TabPane>
             </Tabs>
-            <Snackbar open={otpS} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar open={otpS} autoHideDuration={4000} onClose={handleClose}>
               <Alert
                 onClose={handleClose}
                 severity="success"
@@ -461,14 +523,33 @@ const LoginModal = ({
                 An OTP has been sent Sucessfully!!
               </Alert>
             </Snackbar>
-            <Snackbar open={otpF} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar open={otpF} autoHideDuration={4000} onClose={handleClose}>
               <Alert
                 onClose={handleClose}
                 severity="error"
                 sx={{ width: "100%" }}
-              >
-                An OTP has not been sent Sucessfully!!
-              </Alert>
+              >An OTP has not been sent Sucessfully!!</Alert>
+            </Snackbar>
+            <Snackbar open={userCreate} autoHideDuration={4000} onClose={handleClose}>
+              <Alert
+                onClose={handleClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >An account created Sucessfully!!</Alert>
+            </Snackbar>
+            <Snackbar open={notUser} autoHideDuration={4000} onClose={handleClose}>
+              <Alert
+                onClose={handleClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >An account not created Sucessfully!!</Alert>
+            </Snackbar>
+            <Snackbar open={alreadyUser} autoHideDuration={4000} onClose={handleClose}>
+              <Alert
+                onClose={handleClose}
+                severity="warning"
+                sx={{ width: "100%" }}
+              >User is already Exist!!</Alert>
             </Snackbar>
           </Box>
         </Box>

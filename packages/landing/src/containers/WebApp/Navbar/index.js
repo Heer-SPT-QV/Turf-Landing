@@ -218,7 +218,7 @@ const Navbar = ({
                 </Link> */}
                 <Link href="/">
                   <a className="navbar_button_two">
-                    <Button {...button} title="Logout" />
+                    <Button  onClick={()=>localStorage.removeItem('user-info')}{...button} title="Logout" />
                   </a>
                 </Link>
                 {!matches && (

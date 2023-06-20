@@ -20,12 +20,16 @@ import GlobalStyle, {
   ContentWrapper,
 } from "containers/WebApp/webApp.style";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+
 import Sticky from "react-stickynode";
 import { ThemeProvider } from "styled-components";
 
 const WebApp = () => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+
   const s =0;
 
   useEffect(() => {
@@ -35,6 +39,13 @@ const WebApp = () => {
       document.body.style.overflow = "unset";
     }
   }, [open]);
+
+  useEffect(()=>{
+    var token_check=localStorage.getItem('user-info');
+    if(token_check){
+      router.push('/home/ExtraDetails')
+    }
+  },[])
 
   return (
     <ThemeProvider theme={theme}>
