@@ -101,17 +101,17 @@ function LoginSideComponent() {
         var var_otp = Number(otp)
         var num = Number(phone)
 
-        axios
-            .get(api+`Business/VerifyLogin?PhoneNumber=${num}&Otp=${var_otp}`, headerWithoutToken)
-            .then(async (res) => {
-                console.log(res)
-                if (res.status === 200) {
-                    console.log(res.data)
-                    localStorage.setItem('token', res.data)
-                    setIsLoggedIn(true);
-                    history.push(state?.from || "/");
-                }
-            })
+        // axios
+        //     .get(api+`Business/VerifyLogin?PhoneNumber=${num}&Otp=${var_otp}`, headerWithoutToken)
+        //     .then(async (res) => {
+        //         console.log(res)
+        //         if (res.status === 200) {
+        //             console.log(res.data)
+        //             localStorage.setItem('token', res.data)
+        //             setIsLoggedIn(true);
+        //             history.push(state?.from || "/");
+        //         }
+        //     })
 
     }
     if (isLoggedIn) {

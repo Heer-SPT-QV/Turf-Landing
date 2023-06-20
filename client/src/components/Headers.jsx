@@ -8,6 +8,9 @@ import logo from "../images/logo.svg";
 import NotificationBadge from "react-notification-badge";
 import { Effect } from "react-notification-badge";
 import axios from "axios";
+import api from "../config/api";
+import headerWithToken from "../config/headerWithToken";
+import { toast } from "react-toastify";
 
 
 const Headers = () => {
@@ -18,14 +21,19 @@ const Headers = () => {
     userData,
     setUserData,
   } = useContext(Context);
-  // axios
-  //   .patch(``)
-  //   .then()
-  //   .catch(err => {
-  //     console.log(err);
-  //     toast.error(err?.response?.data?.message);
-  //     toast.error('error:', err.message);
-  //   })
+  
+  axios
+    .get(api+`User/Display`,headerWithToken)
+    .then(async (res)=>{
+      console.log(res.data[0])
+      
+    }
+    )
+    .catch(err => {
+      console.log(err);
+      toast.error(err?.response?.data?.message);
+      toast.error('error_header:', err.message);
+    })
 
   useLayoutEffect(() => {
     document.querySelector(".navbar-burger").addEventListener("click", () => {
