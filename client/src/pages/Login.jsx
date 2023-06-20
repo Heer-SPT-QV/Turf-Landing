@@ -1,21 +1,8 @@
-import React, { useContext, useRef, useState } from "react";
-import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
+import React from "react";
 import classnames from "classnames";
-import {
-  AiOutlineGoogle,
-  AiFillFacebook,
-  AiOutlineInstagram,
-} from "react-icons/ai";
-import { Context } from "../data/context";
 import CartRightSideComponent from "../components/CartRightSideComponent";
 import styles from "../css/Login.module.css";
-import { toast } from "react-toastify";
-import axios from "axios";
-import api from "../config/api";
-import headerWithoutToken from "../config/headerWithoutToken";
-import { links } from "../config/socialLinks";
 import Footer from "../components/footer";
-import { CircularProgress } from "@mui/material";
 import LoginSideComponent from "./LoginSideComponent";
 
 

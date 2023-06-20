@@ -71,7 +71,7 @@ const Signup = () => {
 
 
     const values = {
-      businessId:2,
+      businessId: 2,
       firstname: fnameRef.current?.value,
       lastname: lnameRef.current?.value,
       username: unameRef.current?.value,
@@ -82,30 +82,28 @@ const Signup = () => {
     };
 
     axios
-      .post(api + "User", values, headerWithoutToken)
+      .post(`https://t3s7lrgg-63118.asse.devtunnels.ms/api/User/SingUp`, values, headerWithoutToken)
       .then(async (res) => {
-        console.log(res)
-        console.log(res.data)
-        console.log(res.status)
         if (res.status === 200) {
-          // await localStorage.setItem("token", res.data.body.token);  
-          await localStorage.setItem("turfUserDetails",JSON.stringify(res.config.data));
-          if (localStorage.getItem("turfCart") !== null) {
-            localStorage.removeItem("turfCart");
+          if (res.data === "User Create Successfully") {
+            await localStorage.setItem("turfUserDetails", JSON.stringify(res.config.data));
+            if (localStorage.getItem("turfCart") !== null) {
+              localStorage.removeItem("turfCart");
+            }
+            setUserData(res.data?.body?.user);
+            history.push(state?.from || "/");
+
+          } else if (res.data === "User Alredy Register") {
+            toast.warn(res.data)
+          }else{
+            toast.error('User not create successfully')
           }
-          // setToken(res.data.body.token);
-          setUserData(res.data?.body?.user);
-          // setIsLoggedIn(true);
-          history.push(state?.from || "/");
-        
-        }else{
-          console.warn('hello')
         }
       })
       .catch((err) => {
         console.log(err);
         toast.error(err?.response?.data?.message);
-        toast.error("here's error:",err.message);
+        toast.error('error:', err.message);
       });
   };
 

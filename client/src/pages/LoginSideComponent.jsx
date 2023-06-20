@@ -57,60 +57,66 @@ function LoginSideComponent() {
 
     const handleSignInBtnClicked = () => {
 
-        if (status === "ph") {
-            setLoading(true);
-            setTimeout(() => {
-                // setOtpS(true);
-                setStatus("otp");
-                setLoading(false);
-                caller();
-            }, 2000);
-        }
-        
+
+
         var num = Number(phone)
         console.log(phone)
         axios
-        .get(api + `Business/Login?PhoneNumber=${num}`,headerWithoutToken)
-        .then(async (res) => {
-                console.log(res);
-              if (res.status === 200) {
-                // localStorage.setItem("token", res.data);
-                // localStorage.setItem("turfUserDetails",JSON.stringify(res.data));
-                // if (localStorage.getItem("turfCart") !== null) {
-                //   localStorage.removeItem("turfCart");
-                // }
-                // setToken(res.data.body.token);
-                setUserData(res.data?.body?.user);
-                
-              }
-              if (res.data.code === 404) {
-                toast.error(res.data.message);
-              }
+            .get(`https://t3s7lrgg-80.asse.devtunnels.ms/api/Business/Login?PhoneNumber=${num}`, headerWithoutToken)
+            .then(async (res) => {
+                if (res.status === 200) {
+                    if (res.data === 'OTP sent successfully') {
+                        if (status === "ph") {
+                            setLoading(true);
+                            setTimeout(() => {
+                                // setOtpS(true);
+                                setStatus("otp");
+                                setLoading(false);
+                                caller();
+                            }, 2000);
+                        }
+                        // localStorage.setItem("token", res.data);
+                        // localStorage.setItem("turfUserDetails",JSON.stringify(res.data));
+                        // if (localStorage.getItem("turfCart") !== null) {
+                        //   localStorage.removeItem("turfCart");
+                        // }
+                        toast.success(res.data)
+                        setUserData(res.data?.body?.user);
+
+                    }else if(res.data==='User Not Found'){
+                        toast.warn(res.data)
+                    }else{
+                        toast.warn('Please try again')
+                    }
+                }
+                if (res.data.code === 404) {
+                    toast.error(res.data.message);
+                }
             })
             .catch((err) => {
-              console.log("Here's an error",err);
-              toast.error(err?.response?.data?.message);
-              toast.error(err.message);
+                console.log("Here's an error", err);
+                toast.error(err?.response?.data?.message);
+                toast.error(err.message);
             });
     };
 
 
-    const varify_Otp=()=>{
-        var var_otp=Number(otp)
+    const varify_Otp = () => {
+        var var_otp = Number(otp)
         console.log(var_otp)
-        var num=Number(phone)
+        var num = Number(phone)
 
         axios
-        .get(api + `Business/VerifyLogin?PhoneNumber=${num}&Otp=${var_otp}`,headerWithoutToken)
-        .then(async (res)=>{
-            console.log(res)
-            if(res.status===200){
-                console.log(res.data)
-                localStorage.setItem('token',res.data)
-                setIsLoggedIn(true);
-                history.push(state?.from || "/");
-            }
-        })
+            .get(`https://t3s7lrgg-80.asse.devtunnels.ms/api/Business/VerifyLogin?PhoneNumber=${num}&Otp=${var_otp}`, headerWithoutToken)
+            .then(async (res) => {
+                console.log(res)
+                if (res.status === 200) {
+                    console.log(res.data)
+                    localStorage.setItem('token', res.data)
+                    setIsLoggedIn(true);
+                    history.push(state?.from || "/");
+                }
+            })
 
     }
     if (isLoggedIn) {
@@ -206,7 +212,7 @@ function LoginSideComponent() {
 
             <div className="has-text-centered my-6">
                 <button
-                    onClick={status==='ph'? handleSignInBtnClicked : varify_Otp}
+                    onClick={status === 'ph' ? handleSignInBtnClicked : varify_Otp}
                     className={classnames(styles.signInBtn)}
                     disabled={phoneError || phone === null}
                 >

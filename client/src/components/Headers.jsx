@@ -7,6 +7,8 @@ import styles from "../css/Header.module.css";
 import logo from "../images/logo.svg";
 import NotificationBadge from "react-notification-badge";
 import { Effect } from "react-notification-badge";
+import axios from "axios";
+
 
 const Headers = () => {
   const {
@@ -16,6 +18,14 @@ const Headers = () => {
     userData,
     setUserData,
   } = useContext(Context);
+  // axios
+  //   .patch(``)
+  //   .then()
+  //   .catch(err => {
+  //     console.log(err);
+  //     toast.error(err?.response?.data?.message);
+  //     toast.error('error:', err.message);
+  //   })
 
   useLayoutEffect(() => {
     document.querySelector(".navbar-burger").addEventListener("click", () => {
@@ -60,7 +70,7 @@ const Headers = () => {
                 to="/book"
                 className={classnames("control button", styles.btnBackGround)}
               >
-                <span className="has-text-white">Book Slots</span>
+                <span className="has-text-white">Book Slotsss</span>
               </Link>
             </div>
             <div className="navbar-item">

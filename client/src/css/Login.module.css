@@ -6,7 +6,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("../images/Group2.png") !important;
+  /* background: url("../images/Group2.png") !important; */
+  background: linear-gradient(90deg, rgb(5, 5, 75) 0%, rgba(2, 22, 102, 0.607) 35%, rgb(5, 2, 50) 100%);
+  /* background: rgba(0, 0, 0, 0.658); */
   background-position: 50% 50%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -34,7 +36,7 @@
   border-color: transparent;
   margin-bottom: 20px;
   color: #fff;
-  background-color: #75a269;
+  background-color: #94b08d;
   padding: 5px;
   padding-left: 10px;
 }
