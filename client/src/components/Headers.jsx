@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { BiCart } from "react-icons/bi";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
@@ -21,20 +21,22 @@ const Headers = () => {
     userData,
     setUserData,
   } = useContext(Context);
-  
-  axios
-    .get(api+`User/Display`,headerWithToken)
-    .then(async (res)=>{
-      console.log(res.data[0])
-      
-    }
-    )
-    .catch(err => {
-      console.log(err);
-      toast.error(err?.response?.data?.message);
-      toast.error('error_header:', err.message);
+  const [username, setUsername] = useState('');
+  useEffect(() => {
+    if(isLoggedIn){
+    const tokenn = localStorage.getItem("token")
+    axios.get(api + `User/Display`, {
+      headers: {
+        Authorization: `Bearer ${tokenn}`
+      }
+    }).then(res => {
+      if (res.status === 200) {
+        setUsername(res.data[0].username);
+      }
+    }).catch((err) => {
+      console.log(err)
     })
-
+}})
   useLayoutEffect(() => {
     document.querySelector(".navbar-burger").addEventListener("click", () => {
       document.querySelector(".navbar-burger").classList.toggle("is-active");
@@ -91,7 +93,7 @@ const Headers = () => {
                   style={{ width: "max-content" }}
                 >
                   Hello,
-                  <span style={{ fontWeight: "bold" }}>{userData?.name}</span>
+                  <span style={{ fontWeight: "bold" }}>{username}</span>
                 </p>
                 <div className="navbar-dropdown is-boxed">
                   <Link
