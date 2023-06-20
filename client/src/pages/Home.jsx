@@ -36,7 +36,10 @@ const Home = () => {
           <div className={classnames(styles.HomeTitleWrapper, "my-6 ")}>
             <img src={titleBanner} alt="title" />
           </div>
-
+          <div>
+            <img className={classnames(styles.turfImg)} src="https://media.hudle.in/photos/41661" alt="turf-img" />
+          </div>
+{/* 
           <Carousel
             className={styles.CarouselWrapper}
             additionalTransfrom={0}
@@ -90,9 +93,9 @@ const Home = () => {
             <img src={Slider3} alt="slider3" />
             <img src={Slider4} alt="slider4" />
             <img src={Slider5} alt="slider5" />
-          </Carousel>
+          </Carousel> */}
           <div className={styles.checkoutbtnWrapper}>
-            <Link
+            {/* <Link
               to="/book"
               className={classnames(
                 styles.checkoutbtn,
@@ -100,7 +103,7 @@ const Home = () => {
               )}
             >
               Book Slots
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
