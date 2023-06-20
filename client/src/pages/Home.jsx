@@ -22,7 +22,7 @@ const Home = () => {
 
     return () => {
       try {
-        document.querySelector(".navbar").style.backgroundColor = "#045a14";
+        document.querySelector(".navbar").style.backgroundColor = "transparent";
       } catch (error) {}
     };
   }, []);
