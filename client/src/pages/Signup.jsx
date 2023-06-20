@@ -82,7 +82,7 @@ const Signup = () => {
     };
 
     axios
-      .post(`https://t3s7lrgg-63118.asse.devtunnels.ms/api/User/SingUp`, values, headerWithoutToken)
+      .post(api+`User/SingUp`, values, headerWithoutToken)
       .then(async (res) => {
         if (res.status === 200) {
           if (res.data === "User Create Successfully") {

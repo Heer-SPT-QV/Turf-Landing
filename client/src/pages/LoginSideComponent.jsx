@@ -56,13 +56,9 @@ function LoginSideComponent() {
 
 
     const handleSignInBtnClicked = () => {
-
-
-
         var num = Number(phone)
-        console.log(phone)
         axios
-            .get(`https://t3s7lrgg-80.asse.devtunnels.ms/api/Business/Login?PhoneNumber=${num}`, headerWithoutToken)
+            .get(api+`Business/Login?PhoneNumber=${num}`, headerWithoutToken)
             .then(async (res) => {
                 if (res.status === 200) {
                     if (res.data === 'OTP sent successfully') {
@@ -103,11 +99,10 @@ function LoginSideComponent() {
 
     const varify_Otp = () => {
         var var_otp = Number(otp)
-        console.log(var_otp)
         var num = Number(phone)
 
         axios
-            .get(`https://t3s7lrgg-80.asse.devtunnels.ms/api/Business/VerifyLogin?PhoneNumber=${num}&Otp=${var_otp}`, headerWithoutToken)
+            .get(api+`Business/VerifyLogin?PhoneNumber=${num}&Otp=${var_otp}`, headerWithoutToken)
             .then(async (res) => {
                 console.log(res)
                 if (res.status === 200) {
