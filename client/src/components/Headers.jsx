@@ -80,7 +80,7 @@ const Headers = () => {
                 to="/book"
                 className={classnames("control button", styles.btnBackGround)}
               >
-                <span className="has-text-white">Book Slotsss</span>
+                <span className="has-text-white">BOOK SLOTS</span>
               </Link>
             </div>
             <div className="navbar-item">

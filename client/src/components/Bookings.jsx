@@ -42,7 +42,7 @@ const Bookings = () => {
   const [startTime, setStartTime] = useState("08:00");
   const [endTime, setEndTime] = useState("22:00");
 
-  const handleFetchedData = useCallback(
+    const handleFetchedData = useCallback(
     (res, FetchgroundData) => {
       if (res.status === 200) {
         setTotalSlots(res.data?.body?.selectedSlots.length || 0);
