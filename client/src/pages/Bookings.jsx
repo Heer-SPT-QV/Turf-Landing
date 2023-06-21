@@ -9,6 +9,9 @@ const Home = () => {
   useEffect(() => {
     document.querySelector(".navbar").style.display = "none";
   }, []);
+  // useEffect(() => {
+  //   document.querySelector(".footer").style.display = "none";
+  // }, []);
   return (
     <>
       <div className={classnames(styles.addRelationalBackground)}></div>
