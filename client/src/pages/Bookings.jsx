@@ -6,9 +6,7 @@ import LandingPage from "../components/LandingPage";
 import Footer from "../components/footer";
 
 const Home = () => {
-  useEffect(() => {
-    document.querySelector(".navbar").style.display = "none";
-  }, []);
+
   // useEffect(() => {
   //   document.querySelector(".footer").style.display = "none";
   // }, []);

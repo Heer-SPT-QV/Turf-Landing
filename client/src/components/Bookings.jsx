@@ -21,8 +21,11 @@ import Loading from "./Loading";
 
 
 const Bookings = () => {
+  useEffect(() => {
+    document.querySelector(".navbar").style.display = "none";
+  },[]);
   return (
-  <div></div>
+  <div>hello</div>
   );
 };
 
